@@ -1,0 +1,24 @@
+# System cruft
+.DS_Store
+.DS_store
+
+# IDE files
+.idea/
+
+# Compiled Python file(s)
+*.pyc
+
+# Database file(s)
+*.db
+*.sqlite
+*.sqlite3
+
+# Secret(s)
+*secret*
+
+# Python environment
+env/
+
+# Local settings file(s)
+local_settings.py
+
