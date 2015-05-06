@@ -11,7 +11,7 @@ plt.ion()
 from insect import Insect
 from plume import BasicPlume
 from simulation import Simulation
-from plotting import plume_and_traj_3d as plot_sim
+from plotting import src_prob_and_traj_3d as plot_sim
 
 from config.basic_plume_3d import *
 
@@ -19,13 +19,13 @@ from config.basic_plume_3d import *
 # create plume
 pl = BasicPlume(env=ENV, dt=DT)
 pl.set_aux_params(w=W, r=R, d=D, a=A, tau=TAU)
-pl.set_src_pos(SRCPOS)
+pl.set_src_pos(SRCPOS, is_idx=True)
 
 # create insect
 ins = Insect(env=ENV, dt=DT)
 ins.extract_plume_params(pl=pl)
 ins.loglike_function = LOGLIKE
-ins.set_pos(STARTPOS)
+ins.set_pos(STARTPOS, is_idx=True)
 
 # create simulation
 pl.initialize()
