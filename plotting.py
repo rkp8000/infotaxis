@@ -15,8 +15,8 @@ def plume_and_traj_3d(axs, sim):
     y = sim.pos_idx[:, 1]
     z = sim.pos_idx[:, 2]
 
-    axs[0].plot(x[:sim.ts], y[:sim.ts], color='w', lw=2)
-    axs[1].plot(x[:sim.ts], z[:sim.ts], color='w', lw=2)
+    axs[0].plot(x[:sim.ts], y[:sim.ts], color='k', lw=2)
+    axs[1].plot(x[:sim.ts], z[:sim.ts], color='k', lw=2)
 
     # overlay hits
     if np.any(sim.hits):
@@ -42,8 +42,8 @@ def src_prob_and_traj_3d(axs, sim):
     y = sim.pos_idx[:, 1]
     z = sim.pos_idx[:, 2]
 
-    axs[0].plot(x[:sim.ts], y[:sim.ts], color='w', lw=2)
-    axs[1].plot(x[:sim.ts], z[:sim.ts], color='w', lw=2)
+    axs[0].plot(x[:sim.ts], y[:sim.ts], color='k', lw=2)
+    axs[1].plot(x[:sim.ts], z[:sim.ts], color='k', lw=2)
 
     # overlay hits
     if np.any(sim.hits):
