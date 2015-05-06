@@ -11,7 +11,7 @@ plt.ion()
 from insect import Insect
 from plume import BasicPlume
 from simulation import Simulation
-from plotting import src_prob_and_traj_3d as plot_sim
+from plotting import plume_and_traj_3d as plot_sim
 
 from config.basic_plume_2d import *
 
@@ -41,9 +41,16 @@ plt.draw()
 # run simulation, plotting along the way if necessary
 for step in xrange(nsteps - 1):
     sim.step()
-    if (step % PLOTEVERY == 0) or (step == nsteps - 1):
+    if (step % PLOTEVERY == 0) or (step == nsteps - 2):
         plot_sim(axs, sim)
         plt.draw()
+
+    if sim.at_src:
+        print 'Found source!'
+        break
+
     if PAUSEEVERY:
         if step % PAUSEEVERY == 0:
-            raw_input()
+            raw_input('Press enter to continue...')
+
+raw_input()
