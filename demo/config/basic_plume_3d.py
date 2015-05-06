@@ -5,7 +5,7 @@ from logprob_odor import binary_advec_diff_tavg
 
 # PLOTTING
 PLOTEVERY = 10
-PAUSEEVERY = 50
+PAUSEEVERY = 100
 PLOTKWARGS = {'figsize': (10, 10),
               'facecolor': 'w'}
 
@@ -23,7 +23,7 @@ ENV = Environment3d(XRBINS, YRBINS, ZRBINS)
 
 
 # PLUME
-SRCPOS = (0, 7, 0)
+SRCPOS = (0, 7, 7)
 W = 0.4  # wind (m/s)
 R = 50  # source emission rate
 D = 0.12  # diffusivity (m^2/s)
