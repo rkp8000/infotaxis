@@ -65,10 +65,10 @@ class Insect(object):
         self.a = pl.a
         self.tau = pl.tau
 
-    def set_pos(self, pos, isidx=False):
+    def set_pos(self, pos, is_idx=False):
         """Set insect position."""
 
-        if isidx:
+        if is_idx:
             self.pos_idx = pos
         else:
             # extract idx from position
@@ -102,11 +102,11 @@ class Insect(object):
         # calculate extended loglikelihood map
 
         # get environment geometry
-        xext = self.env.x + self.env.x[0]
+        xext = self.env.x - self.env.x[0]
         xext = cc([-xext[1:][::-1], xext])
-        yext = self.env.y + self.env.y[0]
+        yext = self.env.y - self.env.y[0]
         yext = cc([-yext[1:][::-1], yext])
-        zext = self.env.z + self.env.z[0]
+        zext = self.env.z - self.env.z[0]
         zext = cc([-zext[1:][::-1], zext])
 
         central_idx = ((len(xext) - 1)/2, (len(yext) - 1)/2, (len(zext) - 1)/2)
@@ -146,6 +146,14 @@ class Insect(object):
             return self.logprob - self.logprob.max()
         else:
             raise NotImplementedError('Functionality not yet present.')
+
+    @property
+    def logprobxy(self):
+        return self.logprob[:, :, self.env.center_zidx]
+
+    @property
+    def logprobxz(self):
+        return self.logprob[:, self.env.center_yidx, :]
 
     def get_utility_map(self):
         """Calculate utility for moving to every position in environment."""
