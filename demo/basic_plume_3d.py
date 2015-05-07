@@ -11,7 +11,7 @@ plt.ion()
 from insect import Insect
 from plume import BasicPlume
 from simulation import Simulation
-from plotting import plume_and_traj_3d as plot_sim
+from plotting import plume_traj_and_entropy_3d as plot_sim
 
 from config.basic_plume_3d import *
 
@@ -35,7 +35,7 @@ nsteps = int(np.floor(RUNTIME/DT))
 sim = Simulation(pl=pl, ins=ins, nsteps=nsteps)
 
 # open figure and axes
-_, axs = plt.subplots(2, 1, **PLOTKWARGS)
+_, axs = plt.subplots(3, 1, **PLOTKWARGS)
 plt.draw()
 
 # run simulation, plotting along the way if necessary
@@ -46,7 +46,7 @@ for step in xrange(nsteps - 1):
         plt.draw()
 
     if sim.at_src:
-        print 'Found source!'
+        print 'Found source after {} timesteps.'.format(sim.ts)
         break
 
     if PAUSEEVERY:
