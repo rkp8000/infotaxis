@@ -1,1 +1,2 @@
-__all__ = ['ins_loglike']
+__all__ = ['ins_loglike',
+           'save_trial']
