@@ -108,6 +108,7 @@ class Insect(Base):
     __tablename__ = 'insect'
 
     id = Column(Integer, primary_key=True)
+    type = Column(String(255))
 
     simulations = relationship("Simulation", backref='insect')
     insect_params = relationship("InsectParam", backref='insect')
@@ -128,6 +129,7 @@ class Plume(Base):
     __tablename__ = 'plume'
 
     id = Column(Integer, primary_key=True)
+    type = Column(String(255))
 
     simulations = relationship("Simulation", backref='plume')
     plume_params = relationship("PlumeParam", backref='plume')
