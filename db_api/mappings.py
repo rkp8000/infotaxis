@@ -28,13 +28,14 @@ class Simulation(Base):
 
     dt = Column(Float)
 
+    geom_config_group_id = Column(String(255), ForeignKey('geom_config_group.id'))
+
     plume_id = Column(Integer, ForeignKey('plume.id'))
     insect_id = Column(Integer, ForeignKey('insect.id'))
 
-    geom_config_group_id = Column(String(255), ForeignKey('geom_config_group.id'))
+    ongoing_run_id = Column(Integer, ForeignKey('ongoing_run.id'))
 
     trials = relationship("Trial", backref='simulation')
-    ongoing_runs = relationship("OngoingRun", backref='simulation')
 
 
 class OngoingRun(Base):
@@ -44,7 +45,7 @@ class OngoingRun(Base):
 
     trials_completed = Column(Integer)
 
-    simulation_id = Column(String(255), ForeignKey('simulation.id'))
+    simulations = relationship("Simulation", backref='ongoing_run')
 
 
 class GeomConfigGroup(Base):
