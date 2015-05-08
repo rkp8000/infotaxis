@@ -13,6 +13,7 @@ class Trial(object):
         self.at_src = False
 
         # allocate arrays for storing data
+        nsteps += 1
         self.pos = np.zeros((nsteps, 3), dtype=float)
         self.pos_idx = np.zeros((nsteps, 3), dtype=int)
         self.conc = np.zeros((nsteps,), dtype=float)
@@ -60,3 +61,11 @@ class Trial(object):
         self.odor[self.ts] = self.ins.odor
         self.hits[self.ts] = self.ins.hit
         self.entropies[self.ts] = self.ins.S
+
+    @property
+    def hxy(self):
+        return 3*np.ones((nsteps,))
+
+    @property
+    def hxyz(self):
+        return 3*np.ones((nsteps,))
