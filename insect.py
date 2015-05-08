@@ -21,6 +21,8 @@ class Insect(object):
         env: Environment in which insect lives.
     """
 
+    name = 'basic'
+
     # params that must be set before initializing
     param_names = ('r', 'd', 'a', 'tau', 'w',
                    'loglike_function')
