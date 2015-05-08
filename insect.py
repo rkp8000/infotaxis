@@ -49,6 +49,7 @@ class Insect(object):
         self.odor_domain = None  # domain of odor possibilities
         
         # set some other variables to their null values
+        self.params = {}
         self.next_pos_idxs = None
         self.move_utils = np.zeros((len(self.moves),), dtype=float)
         self.prob = None
@@ -60,14 +61,19 @@ class Insect(object):
         knowledge of the plume statistics)."""
 
         if w:
+            self.params['w'] = w
             self.w = w
         if r:
+            self.params['r'] = r
             self.r = r
         if d:
+            self.params['d'] = d
             self.d = d
         if a:
+            self.params['a'] = a
             self.a = a
         if tau:
+            self.params['tau'] = tau
             self.tau = tau
 
     def set_pos(self, pos, is_idx=False):
