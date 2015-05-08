@@ -89,8 +89,8 @@ class Trial(Base):
 
     trial_info = relationship("TrialInfo", backref='trial')
 
-    start_timepoint = Column(BigInteger)
-    end_timepoint = Column(BigInteger)
+    start_timepoint_id = Column(BigInteger)
+    end_timepoint_id = Column(BigInteger)
 
 
 class TrialInfo(Base):
