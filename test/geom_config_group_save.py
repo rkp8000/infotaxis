@@ -33,3 +33,9 @@ geom_config_group.geom_configs += geom_configs
 
 session.add(geom_config_group)
 session.commit()
+
+next_geom = GeomConfig()
+session.add(next_geom)
+session.flush()
+print next_geom.id
+session.rollback()
