@@ -55,15 +55,20 @@ class Insect(object):
         self.logprob = None
         self.logprob = None
 
-    def extract_plume_params(self, pl):
+    def set_params(self, w=None, r=None, d=None, a=None, tau=None):
         """Set insect's parameters equal to the plume's (i.e., so it has perfect
         knowledge of the plume statistics)."""
 
-        self.w = pl.w
-        self.r = pl.r
-        self.d = pl.d
-        self.a = pl.a
-        self.tau = pl.tau
+        if w:
+            self.w = w
+        if r:
+            self.r = r
+        if d:
+            self.d = d
+        if a:
+            self.a = a
+        if tau:
+            self.tau = tau
 
     def set_pos(self, pos, is_idx=False):
         """Set insect position."""
