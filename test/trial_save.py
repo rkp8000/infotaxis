@@ -95,23 +95,25 @@ for tctr in range(TOTALTRIALS):
     trial = Trial(pl=pl, ins=ins, nsteps=geom_config.duration)
 
     # run trial, plotting along the way if necessary
-    for step in xrange(geom_config.duration):
+    for step in xrange(geom_config.duration - 1):
         trial.step()
 
         if trial.at_src:
             print 'Found source after {} timesteps.'.format(trial.ts)
             break
 
-    # get start timepoint id
-    dummy_tp = mappings.Timepoint()
-    session.add(dummy_tp)
-    session.flush()
-    start_tp_id = dummy_tp.id
-    session.rollback()
-
-    end_tp_id = start_tp_id + trial.ts
-
+    start_tp_id, end_tp_id = None, None
     # add timepoints
+    for tp_ctr in xrange(trial.ts + 1):
+        tp = mappings.Timepoint()
+        tp.xidx, tp.yidx, tp.zidx = trial.pos_idx[tp_ctr]
+        session.add(tp)
+
+        # get timepoint start and end ids if first iteration
+        if tp_ctr == 0:
+            session.flush()
+            start_tp_id = tp.id
+            end_tp_id = start_tp_id + trial.ts
 
     # create trial
     tr_rel = mappings.Trial()
@@ -120,7 +122,7 @@ for tctr in range(TOTALTRIALS):
 
     # add trial info to trial
     tr_info = mappings.TrialInfo()
-    tr_info.duration = trial.ts
+    tr_info.duration = trial.ts + 1
     tr_info.found_src = trial.at_src
     tr_rel.trial_info = [tr_info]
 
