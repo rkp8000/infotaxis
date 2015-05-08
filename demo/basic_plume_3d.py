@@ -39,7 +39,7 @@ _, axs = plt.subplots(3, 1, **PLOTKWARGS)
 plt.draw()
 
 # run trial, plotting along the way if necessary
-for step in xrange(nsteps - 1):
+for step in xrange(nsteps):
     trial.step()
     if (step % PLOTEVERY == 0) or (step == nsteps - 1):
         plot_trial(axs, trial)
