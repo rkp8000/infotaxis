@@ -27,7 +27,7 @@ ins.set_params(**PLUME_PARAMS)
 ins.loglike_function = LOGLIKE
 ins.set_pos(STARTPOS, is_idx=True)
 
-# create simulation
+# create trial
 pl.initialize()
 ins.initialize()
 nsteps = int(np.floor(RUNTIME/DT))
@@ -38,7 +38,7 @@ trial = Trial(pl=pl, ins=ins, nsteps=nsteps)
 _, axs = plt.subplots(3, 1, **PLOTKWARGS)
 plt.draw()
 
-# run simulation, plotting along the way if necessary
+# run trial, plotting along the way if necessary
 for step in xrange(nsteps - 1):
     trial.step()
     if (step % PLOTEVERY == 0) or (step == nsteps - 1):
