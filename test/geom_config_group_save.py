@@ -16,8 +16,6 @@ Base.metadata.create_all(engine)
 geom_config_group = GeomConfigGroup(id='test_geom_config_group')
 geom_config_group.description = 'group of three random configurations'
 
-session.add(geom_config_group)
-
 # create some geom_configs
 geom_configs = []
 for _ in range(NGEOMCONFIGS):
