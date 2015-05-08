@@ -84,7 +84,7 @@ def plume_traj_and_entropy_3d(axs, trial):
         yhit = y[trial.hits > 0]
         zhit = z[trial.hits > 0]
 
-        ts_hit = ts[sim.hits > 0]
+        ts_hit = ts[trial.hits > 0]
         entropies_hit = trial.entropies[trial.hits > 0]
 
         axs[0].scatter(xhit[:trial.ts], yhit[:trial.ts], s=50, c='r')
