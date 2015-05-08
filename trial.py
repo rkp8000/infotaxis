@@ -13,7 +13,6 @@ class Trial(object):
         self.at_src = False
 
         # allocate arrays for storing data
-        nsteps += 1
         self.pos = np.zeros((nsteps, 3), dtype=float)
         self.pos_idx = np.zeros((nsteps, 3), dtype=int)
         self.conc = np.zeros((nsteps,), dtype=float)
