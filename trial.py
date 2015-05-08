@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class Simulation(object):
+class Trial(object):
 
     def __init__(self, pl, ins, nsteps=1000):
 
