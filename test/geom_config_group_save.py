@@ -31,7 +31,7 @@ for _ in range(NGEOMCONFIGS):
 
     geom_configs += [geom_config]
 
-geom_config_group.geom_configs = geom_configs
+geom_config_group.geom_configs += geom_configs
 
 session.add(geom_config_group)
 session.commit()
