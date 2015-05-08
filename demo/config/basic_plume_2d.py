@@ -24,18 +24,13 @@ ENV = Environment3d(XRBINS, YRBINS, ZRBINS)
 
 # PLUME
 SRCPOS = (0, 7, 0)
-W = 0.4  # wind (m/s)
-R = 10  # source emission rate
-D = 0.12  # diffusivity (m^2/s)
-A = .002  # searcher size (m)
-TAU = 1000  # particle lifetime (s)
-
-# DEBUGGING PARAMS
-# W = 0.4
-# R = 100
-# D = .001
-# A = .00001
-# TAU = 25
+PLUME_PARAMS = {
+                'w': 0.4,  # wind (m/s)
+                'r': 10,  # source emission rate
+                'd': 0.12,  # diffusivity (m^2/s)
+                'a': .002,  # searcher size (m)
+                'tau': 1000,  # particle lifetime (s)
+                }
 
 
 # INSECT

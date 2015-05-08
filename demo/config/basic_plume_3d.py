@@ -5,7 +5,7 @@ from logprob_odor import binary_advec_diff_tavg
 
 # PLOTTING
 PLOTEVERY = 10
-PAUSEEVERY = 100
+PAUSEEVERY = 0
 PLOTKWARGS = {'figsize': (10, 10),
               'facecolor': 'w'}
 
@@ -24,19 +24,14 @@ ENV = Environment3d(XRBINS, YRBINS, ZRBINS)
 
 # PLUME
 SRCPOS = (0, 7, 7)
-W = 0.4  # wind (m/s)
-R = 50  # source emission rate
-D = 0.12  # diffusivity (m^2/s)
-A = .002  # searcher size (m)
-TAU = 1000  # particle lifetime (s)
-
-# # DEBUGGING PARAMS
-# W = 0.4
-# R = 100
-# D = .001
-# A = .00001
-# TAU = 25
+PLUME_PARAMS = {
+                'w': 0.4,  # wind (m/s)
+                'r': 500,  # source emission rate
+                'd': 0.12,  # diffusivity (m^2/s)
+                'a': .002,  # searcher size (m)
+                'tau': 1000,  # particle lifetime (s)
+                }
 
 # INSECT
-STARTPOS = (64, 7, 0)
+STARTPOS = (64, 0, 0)
 LOGLIKE = binary_advec_diff_tavg

@@ -1,7 +1,7 @@
 """
-Generate a 3D infotaxis trajectory as the insect flies through a basic plume.
+Generate a 2D infotaxis trajectory as the insect flies through a basic plume.
 
-The settings and parameters of this demo are located in config/basic_plume_3d.py.
+The settings and parameters of this demo are located in config/basic_plume_2d.py.
 """
 
 import numpy as np
@@ -18,12 +18,12 @@ from config.basic_plume_2d import *
 
 # create plume
 pl = BasicPlume(env=ENV, dt=DT)
-pl.set_aux_params(w=W, r=R, d=D, a=A, tau=TAU)
+pl.set_params(**PLUME_PARAMS)
 pl.set_src_pos(SRCPOS, is_idx=True)
 
 # create insect
 ins = Insect(env=ENV, dt=DT)
-ins.extract_plume_params(pl=pl)
+ins.set_params(**PLUME_PARAMS)
 ins.loglike_function = LOGLIKE
 ins.set_pos(STARTPOS, is_idx=True)
 
