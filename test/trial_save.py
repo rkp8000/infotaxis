@@ -30,9 +30,7 @@ sim = mappings.Simulation()
 sim.id = ID
 sim.description = DESCRIPTION
 sim.total_trials = TOTALTRIALS
-sim.xmin, sim.xmax, sim.nx = ENV.xbins.min(), ENV.xbins.max(), ENV.nx
-sim.ymin, sim.ymax, sim.ny = ENV.ybins.min(), ENV.ybins.max(), ENV.ny
-sim.zmin, sim.zmax, sim.nz = ENV.zbins.min(), ENV.zbins.max(), ENV.nz
+sim.env = ENV
 sim.dt = DT
 
 # get geom_config_group and add simulation to it
@@ -40,41 +38,40 @@ geom_config_group = session.query(mappings.GeomConfigGroup).get(GEOMCONFIGGROUP)
 geom_config_group.simulations += [sim]
 session.add(geom_config_group)
 
-# create plume
+# create and save plume
 pl = BasicPlume(env=ENV, dt=DT)
 pl.set_params(**PLUME_PARAMS)
+# pl.set_orm(mappings, sim=sim)
+# session.add(pl.orm)
 
 # save plume and params
 pl_rel = mappings.Plume()
 pl_rel.type = pl.name
 pl_rel.simulations += [sim]
 pl_rel.plume_params = [mappings.PlumeParam(name=n, value=v) for n, v in pl.params.items()]
-
 session.add(pl_rel)
 
-# create insect
+# create and save insect
 ins = Insect(env=ENV, dt=DT)
 ins.set_params(**PLUME_PARAMS)
 ins.loglike_function = LOGLIKE
+# ins.set_orm(mappings, sim=sim)
+# session.add(ins.orm)
 
 # save insect and params
 ins_rel = mappings.Insect()
 ins_rel.type = ins.name
 ins_rel.simulations += [sim]
 ins_rel.insect_params = [mappings.InsectParam(name=n, value=v) for n, v in ins.params.items()]
-
 session.add(ins_rel)
 
 # create ongoing run
-ongoing_run = mappings.OngoingRun()
-ongoing_run.trials_completed = 0
-ongoing_run.simulations = [sim]
-
+ongoing_run = mappings.OngoingRun(trials_completed=0, simulations=[sim])
 session.add(ongoing_run)
 
-# loop over all trials
 session.commit()
 
+# loop over all trials
 for tctr in range(TOTALTRIALS):
 
     # pick random configuration
