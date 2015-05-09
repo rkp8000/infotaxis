@@ -5,6 +5,9 @@
 # IDE files
 .idea/
 
+# connection variables
+db_api/cxn_vars.py
+
 # Compiled Python file(s)
 *.pyc
 
