@@ -8,6 +8,7 @@ Base = declarative_base()
 
 class Simulation(Base):
     __tablename__ = 'simulation'
+    _env = None
 
     id = Column(String(255), primary_key=True)
 
@@ -36,6 +37,26 @@ class Simulation(Base):
     ongoing_run_id = Column(Integer, ForeignKey('ongoing_run.id'))
 
     trials = relationship("Trial", backref='simulation')
+
+    @property
+    def env(self):
+        return self._env
+
+    @env.setter
+    def env(self, env):
+        self._env = env
+
+        self.xmin = env.xbins[0]
+        self.xmax = env.xbins[-1]
+        self.nx = env.nx
+
+        self.ymin = env.ybins[0]
+        self.ymax = env.ybins[-1]
+        self.ny = env.ny
+
+        self.zmin = env.zbins[0]
+        self.zmax = env.zbins[-1]
+        self.nz = env.nz
 
 
 class OngoingRun(Base):
