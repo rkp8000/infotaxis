@@ -3,7 +3,7 @@ Created on Fri Mar 27 14:35:44 2015
 
 @author: rkp
 
-Connect to infotaxis database.
+Connect to infotaxis or test_infotaxis database.
 """
 
 from sqlalchemy import create_engine
