@@ -41,29 +41,29 @@ session.add(geom_config_group)
 # create and save plume
 pl = BasicPlume(env=ENV, dt=DT)
 pl.set_params(**PLUME_PARAMS)
-# pl.set_orm(mappings, sim=sim)
-# session.add(pl.orm)
-
-# save plume and params
-pl_rel = mappings.Plume()
-pl_rel.type = pl.name
-pl_rel.simulations += [sim]
-pl_rel.plume_params = [mappings.PlumeParam(name=n, value=v) for n, v in pl.params.items()]
-session.add(pl_rel)
+pl.set_orm(mappings, sim=sim)
+session.add(pl.orm)
 
 # create and save insect
 ins = Insect(env=ENV, dt=DT)
 ins.set_params(**PLUME_PARAMS)
 ins.loglike_function = LOGLIKE
-# ins.set_orm(mappings, sim=sim)
-# session.add(ins.orm)
+ins.set_orm(mappings, sim=sim)
+session.add(ins.orm)
+
+# save plume and params
+# pl_rel = mappings.Plume()
+# pl_rel.type = pl.name
+# pl_rel.simulations += [sim]
+# pl_rel.plume_params = [mappings.PlumeParam(name=n, value=v) for n, v in pl.params.items()]
+# session.add(pl_rel)
 
 # save insect and params
-ins_rel = mappings.Insect()
-ins_rel.type = ins.name
-ins_rel.simulations += [sim]
-ins_rel.insect_params = [mappings.InsectParam(name=n, value=v) for n, v in ins.params.items()]
-session.add(ins_rel)
+# ins_rel = mappings.Insect()
+# ins_rel.type = ins.name
+# ins_rel.simulations += [sim]
+# ins_rel.insect_params = [mappings.InsectParam(name=n, value=v) for n, v in ins.params.items()]
+# session.add(ins_rel)
 
 # create ongoing run
 ongoing_run = mappings.OngoingRun(trials_completed=0, simulations=[sim])
@@ -98,6 +98,11 @@ for tctr in range(TOTALTRIALS):
         if trial.at_src:
             print 'Found source after {} timesteps.'.format(trial.ts)
             break
+
+    # save trial
+    # trial.save_timepoints(mappings, session=session)
+    # trial.set_orm(mappings)
+    # session.add(trial.orm)
 
     start_tp_id, end_tp_id = None, None
     # add timepoints
