@@ -58,6 +58,8 @@ class Insect(object):
         self.logprob = None
         self.logprob = None
 
+        self.orm = None
+
     def set_params(self, w=None, r=None, d=None, a=None, tau=None):
         """Set insect's parameters equal to the plume's (i.e., so it has perfect
         knowledge of the plume statistics)."""
@@ -134,6 +136,17 @@ class Insect(object):
                                             a=self.a, tau=self.tau)
 
             self.loglike_map[odor_idx] = loglike
+
+    def set_orm(self, models, sim=None):
+        """Set up the object relational mapping of the insect.
+
+        The models object must have as an attribute a model called Insect."""
+
+        self.orm = models.Insect(type=self.name)
+        self.orm.insect_params = [models.InsectParam(name=n, value=v) for n, v in self.params.items()]
+
+        if sim:
+            self.orm.simulations = [sim]
 
     def get_loglike(self, odor, pos_idx):
         """Return the relevant portion of the source loglikelihood map (i.e.,
