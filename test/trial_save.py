@@ -27,11 +27,9 @@ mappings.Base.metadata.create_all(engine)
 
 # create simulation
 sim = mappings.Simulation()
-sim.id = ID
-sim.description = DESCRIPTION
-sim.total_trials = TOTALTRIALS
-sim.env = ENV
-sim.dt = DT
+sim.id, sim.description, sim.total_trials = ID, DESCRIPTION, TOTALTRIALS
+sim.env, sim.dt = ENV, DT
+session.add(sim)
 
 # get geom_config_group and add simulation to it
 geom_config_group = session.query(mappings.GeomConfigGroup).get(GEOMCONFIGGROUP)
@@ -50,20 +48,6 @@ ins.set_params(**PLUME_PARAMS)
 ins.loglike_function = LOGLIKE
 ins.set_orm(mappings, sim=sim)
 session.add(ins.orm)
-
-# save plume and params
-# pl_rel = mappings.Plume()
-# pl_rel.type = pl.name
-# pl_rel.simulations += [sim]
-# pl_rel.plume_params = [mappings.PlumeParam(name=n, value=v) for n, v in pl.params.items()]
-# session.add(pl_rel)
-
-# save insect and params
-# ins_rel = mappings.Insect()
-# ins_rel.type = ins.name
-# ins_rel.simulations += [sim]
-# ins_rel.insect_params = [mappings.InsectParam(name=n, value=v) for n, v in ins.params.items()]
-# session.add(ins_rel)
 
 # create ongoing run
 ongoing_run = mappings.OngoingRun(trials_completed=0, simulations=[sim])
