@@ -62,14 +62,12 @@ for tctr in range(TOTALTRIALS):
     geom_config = np.random.choice(geom_config_group.geom_configs)
 
     # set source position
-    src_pos_idx = geom_config.src_xidx, geom_config.src_yidx, geom_config.src_zidx
-    pl.set_src_pos(src_pos_idx, is_idx=True)
+    pl.set_src_pos(geom_config.src_idx, is_idx=True)
 
     # set insect starting position
-    start_pos_idx = geom_config.start_xidx, geom_config.start_yidx, geom_config.start_zidx
-    ins.set_pos(start_pos_idx, is_idx=True)
+    ins.set_pos(geom_config.start_idx, is_idx=True)
 
-    # create trial
+    # initialize plume and insect and create trial
     pl.initialize()
     ins.initialize()
 
@@ -84,37 +82,12 @@ for tctr in range(TOTALTRIALS):
             break
 
     # save trial
-    # trial.save_timepoints(mappings, session=session)
-    # trial.set_orm(mappings)
-    # session.add(trial.orm)
+    trial.add_timepoints(mappings, session=session)
+    trial.set_orm(mappings)
+    session.add(trial.orm)
 
-    start_tp_id, end_tp_id = None, None
-    # add timepoints
-    for tp_ctr in xrange(trial.ts + 1):
-        tp = mappings.Timepoint()
-        tp.xidx, tp.yidx, tp.zidx = trial.pos_idx[tp_ctr]
-        session.add(tp)
-
-        # get timepoint start and end ids if first iteration
-        if tp_ctr == 0:
-            session.flush()
-            start_tp_id = tp.id
-            end_tp_id = start_tp_id + trial.ts
-
-    # create trial
-    tr_rel = mappings.Trial()
-    tr_rel.start_timepoint_id = start_tp_id
-    tr_rel.end_timepoint_id = end_tp_id
-
-    # add trial info to trial
-    tr_info = mappings.TrialInfo()
-    tr_info.duration = trial.ts + 1
-    tr_info.found_src = trial.at_src
-    tr_rel.trial_info = [tr_info]
-
-    # add trial to geom_config and simulation
-    geom_config.trials += [tr_rel]
-    sim.trials += [tr_rel]
+    geom_config.trials += [trial.orm]
+    sim.trials += [trial.orm]
 
     session.add(geom_config)
     session.add(sim)
