@@ -21,6 +21,10 @@ class Trial(object):
         self.entropies = np.zeros((nsteps,), dtype=float)
         self.dist_to_src = np.zeros((nsteps,), dtype=float)
 
+        self.start_tp_id, self.end_tp_id = None, None
+
+        self.orm = None
+
         # take first step
         self.step(first_step=True)
 
@@ -68,3 +72,27 @@ class Trial(object):
     @property
     def hxyz(self):
         return 3*np.ones((nsteps,))
+
+    def add_timepoints(self, models, session):
+
+        # add timepoints
+        for tp_ctr in xrange(self.ts + 1):
+            tp = models.Timepoint()
+            tp.xidx, tp.yidx, tp.zidx = self.pos_idx[tp_ctr]
+            session.add(tp)
+
+            # get timepoint start and end ids if first iteration
+            if tp_ctr == 0:
+                session.flush()
+                self.start_tp_id = tp.id
+                self.end_tp_id = self.start_tp_id + self.ts
+
+    def set_orm(self, models):
+        self.info_orm = models.TrialInfo()
+        self.info_orm.duration = self.ts + 1
+        self.info_orm.found_src = self.at_src
+
+        self.orm = models.Trial()
+        self.orm.start_timepoint_id = self.start_tp_id
+        self.orm.end_timepoint_id = self.end_tp_id
+        self.orm.trial_info = [self.info_orm]
