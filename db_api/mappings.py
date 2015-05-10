@@ -99,6 +99,14 @@ class GeomConfig(Base):
 
     trials = relationship("Trial", backref='geom_config')
 
+    @property
+    def src_idx(self):
+        return self.src_xidx, self.src_yidx, self.src_zidx
+
+    @property
+    def start_idx(self):
+        return self.start_xidx, self.start_yidx, self.start_zidx
+
 
 class Trial(Base):
     __tablename__ = 'trial'
