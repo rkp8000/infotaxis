@@ -52,6 +52,7 @@ class Insect(object):
         
         # set some other variables to their null values
         self.params = {}
+        self.odor = None
         self.next_pos_idxs = None
         self.move_utils = np.zeros((len(self.moves),), dtype=float)
         self.prob = None
