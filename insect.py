@@ -199,24 +199,6 @@ class Insect(object):
 
         return self.next_pos_idxs
 
-    def sample(self, odor):
-        """Store internal odor value, setting the binary value hit to True if
-        the odor value is greater than zero.
-        
-        Args:
-            odor: odor value sampled from plume; this must be in the insect's
-            odor domain"""
-            
-        self.odor = self.odor_domain[nearest(odor, self.odor_domain)]
-
-        # if self.odor > 0:
-        #     self.hit = True
-        # else:
-        #     self.hit = False
-        
-        return self.odor
-
-    """
     @property
     def odor(self):
         return self._odor
@@ -224,7 +206,6 @@ class Insect(object):
     @odor.setter
     def odor(self, odor):
         self._odor = self.odor_domain[nearest(odor, self.odor_domain)]
-    """
         
     def update_src_prob(self, odor=None, pos_idx=None, store=True, log=True):
         """Update probability distribution over src pos.
