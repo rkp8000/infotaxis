@@ -1,4 +1,7 @@
 import numpy as np
+from scipy.ndimage.filters import gaussian_filter1d as smooth
+from math_tools.fun import cdiff
+from math_tools.physics import heading
 
 
 class Trial(object):
@@ -15,11 +18,13 @@ class Trial(object):
         # allocate arrays for storing data
         self.pos = np.zeros((nsteps, 3), dtype=float)
         self.pos_idx = np.zeros((nsteps, 3), dtype=int)
-        self.conc = np.zeros((nsteps,), dtype=float)
         self.odor = np.zeros((nsteps,), dtype=float)
+        self.detected_odor = np.zeros((nsteps,), dtype=float)
         self.hits = np.zeros((nsteps,), dtype=float)
         self.entropies = np.zeros((nsteps,), dtype=float)
         self.dist_to_src = np.zeros((nsteps,), dtype=float)
+
+        self._hxyz = None
 
         self.start_tp_id, self.end_tp_id = None, None
 
@@ -35,11 +40,11 @@ class Trial(object):
             self.ins.move()
 
         # get concentration and odor
-        conc = self.pl.conc[tuple(self.ins.pos_idx)]
-        odor = self.pl.sample(self.ins.pos_idx)
+        odor = self.pl.conc[tuple(self.ins.pos_idx)]
+        detected_odor = self.pl.sample(self.ins.pos_idx)
 
         # let insect sample odor
-        self.ins.sample(odor)
+        self.ins.sample(detected_odor)
 
         # update source probability
         self.ins.update_src_prob()
@@ -60,25 +65,37 @@ class Trial(object):
         # store all data
         self.pos[self.ts, :] = self.ins.pos
         self.pos_idx[self.ts, :] = self.ins.pos_idx
-        self.conc[self.ts] = conc
-        self.odor[self.ts] = self.ins.odor
+        self.odor[self.ts] = odor
+        self.detected_odor[self.ts] = self.ins.odor
         self.hits[self.ts] = self.ins.hit
         self.entropies[self.ts] = self.ins.S
 
     @property
-    def hxy(self):
-        return 3*np.ones((nsteps,))
-
-    @property
     def hxyz(self):
-        return 3*np.ones((nsteps,))
+        if not self._hxyz:
+            # get velocity then heading
+            v = cdiff(self.pos[:self.ts + 1, :], axis=0)
+            self._hxyz = heading(v, up_dir=np.array([-1., 0, 0]), in_deg=True)
+        return self._hxyz
 
-    def add_timepoints(self, models, session):
+    def add_timepoints(self, models, session, heading_smoothing=1):
+
+        # get smoothed headings
+        hxyz = smooth(self.hxyz, heading_smoothing)
 
         # add timepoints
         for tp_ctr in xrange(self.ts + 1):
             tp = models.Timepoint()
+
             tp.xidx, tp.yidx, tp.zidx = self.pos_idx[tp_ctr]
+            try:
+                tp.hxyz = hxyz[tp_ctr]
+            except:
+                import pdb; pdb.set_trace()
+
+            tp.odor = self.odor[tp_ctr]
+            tp.detected_odor = self.detected_odor[tp_ctr]
+
             session.add(tp)
 
             # get timepoint start and end ids if first iteration
