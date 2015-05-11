@@ -29,6 +29,7 @@ mappings.Base.metadata.create_all(engine)
 sim = mappings.Simulation()
 sim.id, sim.description, sim.total_trials = ID, DESCRIPTION, TOTALTRIALS
 sim.env, sim.dt = ENV, DT
+sim.heading_smoothing = HEADING_SMOOTHING
 session.add(sim)
 
 # get geom_config_group and add simulation to it
@@ -82,7 +83,7 @@ for tctr in range(TOTALTRIALS):
             break
 
     # save trial
-    trial.add_timepoints(mappings, session=session)
+    trial.add_timepoints(mappings, session=session, heading_smoothing=sim.heading_smoothing)
     trial.set_orm(mappings)
     session.add(trial.orm)
 

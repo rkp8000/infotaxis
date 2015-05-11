@@ -6,6 +6,8 @@ ID = 'test_simulation'
 DESCRIPTION = 'Test simulation. Generate and save 5 infotaxis runs in the database.'
 GEOMCONFIGGROUP = 'test_geom_config_group'
 
+HEADING_SMOOTHING = 2
+
 # PLOTTING
 PLOTEVERY = 10
 PAUSEEVERY = 0
