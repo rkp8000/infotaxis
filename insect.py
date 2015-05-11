@@ -52,7 +52,7 @@ class Insect(object):
         
         # set some other variables to their null values
         self.params = {}
-        self.odor = None
+        self._odor = None
         self.next_pos_idxs = None
         self.move_utils = np.zeros((len(self.moves),), dtype=float)
         self.prob = None
@@ -209,12 +209,22 @@ class Insect(object):
             
         self.odor = self.odor_domain[nearest(odor, self.odor_domain)]
 
-        if self.odor > 0:
-            self.hit = True
-        else:
-            self.hit = False
+        # if self.odor > 0:
+        #     self.hit = True
+        # else:
+        #     self.hit = False
         
         return self.odor
+
+    """
+    @property
+    def odor(self):
+        return self._odor
+
+    @odor.setter
+    def odor(self, odor):
+        self._odor = self.odor_domain[nearest(odor, self.odor_domain)]
+    """
         
     def update_src_prob(self, odor=None, pos_idx=None, store=True, log=True):
         """Update probability distribution over src pos.

@@ -19,10 +19,10 @@ def plume_and_traj_3d(axs, trial):
     axs[1].plot(x[:trial.ts], z[:trial.ts], color='k', lw=2)
 
     # overlay hits
-    if np.any(trial.hits):
-        xhit = x[trial.hits > 0]
-        yhit = y[trial.hits > 0]
-        zhit = z[trial.hits > 0]
+    if np.any(trial.detected_odor > 0):
+        xhit = x[trial.detected_odor > 0]
+        yhit = y[trial.detected_odor > 0]
+        zhit = z[trial.detected_odor > 0]
 
         axs[0].scatter(xhit[:trial.ts], yhit[:trial.ts], s=50, c='r')
         axs[1].scatter(xhit[:trial.ts], zhit[:trial.ts], s=50, c='r')
@@ -47,10 +47,10 @@ def src_prob_and_traj_3d(axs, trial):
     axs[1].plot(x[:trial.ts], z[:trial.ts], color='k', lw=2)
 
     # overlay hits
-    if np.any(trial.hits):
-        xhit = x[trial.hits > 0]
-        yhit = y[trial.hits > 0]
-        zhit = z[trial.hits > 0]
+    if np.any(trial.detected_odor > 0):
+        xhit = x[trial.detected_odor > 0]
+        yhit = y[trial.detected_odor > 0]
+        zhit = z[trial.detected_odor > 0]
 
         axs[0].scatter(xhit[:trial.ts], yhit[:trial.ts], s=50, c='r')
         axs[1].scatter(xhit[:trial.ts], zhit[:trial.ts], s=50, c='r')
@@ -79,13 +79,13 @@ def plume_traj_and_entropy_3d(axs, trial):
     axs[2].plot(ts[:trial.ts], trial.entropies[:trial.ts], lw=2)
 
     # overlay hits
-    if np.any(trial.hits):
-        xhit = x[trial.hits > 0]
-        yhit = y[trial.hits > 0]
-        zhit = z[trial.hits > 0]
+    if np.any(trial.detected_odor > 0):
+        xhit = x[trial.detected_odor > 0]
+        yhit = y[trial.detected_odor > 0]
+        zhit = z[trial.detected_odor > 0]
 
-        ts_hit = ts[trial.hits > 0]
-        entropies_hit = trial.entropies[trial.hits > 0]
+        ts_hit = ts[trial.detected_odor > 0]
+        entropies_hit = trial.entropies[trial.detected_odor > 0]
 
         axs[0].scatter(xhit[:trial.ts], yhit[:trial.ts], s=50, c='r')
         axs[1].scatter(xhit[:trial.ts], zhit[:trial.ts], s=50, c='r')
