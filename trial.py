@@ -43,8 +43,8 @@ class Trial(object):
         detected_odor = self.pl.sample(self.ins.pos_idx)
 
         # let insect sample odor
-        # self.ins.odor = detected_odor
-        self.ins.sample(detected_odor)
+        self.ins.odor = detected_odor
+        # self.ins.sample(detected_odor)
 
         # update source probability
         self.ins.update_src_prob()
