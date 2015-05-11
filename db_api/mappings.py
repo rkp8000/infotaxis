@@ -29,6 +29,8 @@ class Simulation(Base):
 
     dt = Column(Float)
 
+    heading_smoothing = Column(Integer)
+
     geom_config_group_id = Column(String(255), ForeignKey('geom_config_group.id'))
 
     plume_id = Column(Integer, ForeignKey('plume.id'))
@@ -184,8 +186,7 @@ class Timepoint(Base):
     yidx = Column(Integer)
     zidx = Column(Integer)
 
-    hxy = Column(Float)
     hxyz = Column(Float)
 
-    hxy_smoothed = Column(Float)
-    hxyz_smoothed = Column(Float)
+    odor = Column(Float)
+    detected_odor = Column(Float)
