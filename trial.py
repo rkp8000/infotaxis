@@ -115,7 +115,8 @@ class Trial(object):
             raise ValueError('Please set orm before binding timepoints!')
 
         stp, etp = self._orm.start_timepoint_id, self._orm.end_timepoint_id
-        for ts, tp_id in enumerate(range(stp, etp+1)):
+
+        for ts, tp_id in enumerate(range(stp, etp + 1)):
             tp = session.query(models.Timepoint).get(tp_id)
             self.pos_idx[ts] = tp.xidx, tp.yidx, tp.zidx
             self.pos[ts] = self.pl.env.pos_from_idx(self.pos_idx[ts])
@@ -138,4 +139,3 @@ class Trial(object):
     @orm.setter
     def orm(self, orm):
         self._orm = orm
-        self.ts = orm.trial_info.duration
