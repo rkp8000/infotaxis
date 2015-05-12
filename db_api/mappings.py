@@ -1,3 +1,4 @@
+import numpy as np
 from sqlalchemy import Column, ForeignKey, Sequence
 from sqlalchemy import Boolean, Integer, BigInteger, Float, String, Text
 from sqlalchemy.ext.declarative import declarative_base
@@ -44,6 +45,11 @@ class Simulation(Base):
 
     @property
     def env(self):
+        if not self._env:
+            xbins = np.linspace(self.xmin, self.xmax, self.nx + 1)
+            ybins = np.linspace(self.ymin, self.ymax, self.ny + 1)
+            zbins = np.linspace(self.zmin, self.zmax, self.nz + 1)
+            self._env = Environment3d(xbins, ybins, zbins)
         return self._env
 
     @env.setter
