@@ -25,17 +25,16 @@ if not TESTCXN:
 
 mappings.Base.metadata.create_all(engine)
 
+# get geom_config_group
+geom_config_group = session.query(mappings.GeomConfigGroup).get(GEOMCONFIGGROUP)
+
 # create simulation
 sim = mappings.Simulation()
 sim.id, sim.description, sim.total_trials = ID, DESCRIPTION, TOTALTRIALS
 sim.env, sim.dt = ENV, DT
 sim.heading_smoothing = HEADING_SMOOTHING
+sim.geom_config_group = geom_config_group
 session.add(sim)
-
-# get geom_config_group and add simulation to it
-geom_config_group = session.query(mappings.GeomConfigGroup).get(GEOMCONFIGGROUP)
-geom_config_group.simulations += [sim]
-session.add(geom_config_group)
 
 # create and save plume
 pl = BasicPlume(env=ENV, dt=DT)
