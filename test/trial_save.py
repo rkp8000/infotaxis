@@ -40,14 +40,14 @@ session.add(geom_config_group)
 # create and save plume
 pl = BasicPlume(env=ENV, dt=DT)
 pl.set_params(**PLUME_PARAMS)
-pl.set_orm(mappings, sim=sim)
+pl.generate_orm(mappings, sim=sim)
 session.add(pl.orm)
 
 # create and save insect
 ins = Insect(env=ENV, dt=DT)
 ins.set_params(**PLUME_PARAMS)
 ins.loglike_function = LOGLIKE
-ins.set_orm(mappings, sim=sim)
+ins.generate_orm(mappings, sim=sim)
 session.add(ins.orm)
 
 # create ongoing run
@@ -84,7 +84,7 @@ for tctr in range(TOTALTRIALS):
 
     # save trial
     trial.add_timepoints(mappings, session=session, heading_smoothing=sim.heading_smoothing)
-    trial.set_orm(mappings)
+    trial.generate_orm(mappings)
     session.add(trial.orm)
 
     geom_config.trials += [trial.orm]
