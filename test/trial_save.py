@@ -73,7 +73,7 @@ for tctr in range(TOTALTRIALS):
 
     trial = Trial(pl=pl, ins=ins, nsteps=geom_config.duration)
 
-    # run trial, plotting along the way if necessary
+    # run trial
     for step in xrange(geom_config.duration - 1):
         trial.step()
 
@@ -84,13 +84,9 @@ for tctr in range(TOTALTRIALS):
     # save trial
     trial.add_timepoints(mappings, session=session, heading_smoothing=sim.heading_smoothing)
     trial.generate_orm(mappings)
+    trial.orm.geom_config = geom_config
+    trial.orm.simulation = sim
     session.add(trial.orm)
-
-    geom_config.trials += [trial.orm]
-    sim.trials += [trial.orm]
-
-    session.add(geom_config)
-    session.add(sim)
 
     # update ongoing_run
     ongoing_run.trials_completed = tctr + 1
