@@ -190,3 +190,5 @@ class Timepoint(Base):
 
     odor = Column(Float)
     detected_odor = Column(Float)
+
+    entropy = Column(Float)
