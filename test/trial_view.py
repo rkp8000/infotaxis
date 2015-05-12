@@ -13,11 +13,10 @@ from config.trial_view import *
 
 # get simulation
 sim = session.query(mappings.Simulation).get(SIMULATIONID)
-print sim.id
 
 pl = BasicPlume(sim.env, sim.dt, orm=sim.plume)
 
-_, axs = plt.subplots(2, 1)
+_, axs = plt.subplots(2, 1, facecolor='w', figsize=(10, 10))
 
 for tr_orm in sim.trials:
     [ax.cla() for ax in axs]
@@ -27,7 +26,6 @@ for tr_orm in sim.trials:
 
     trial = Trial(pl, None, orm=tr_orm)
     trial.bind_timepoints(mappings, session)
-
 
     plot_trial(axs, trial)
     axs[0].set_title('trial {} from {}'.format(trial.orm.id, sim.id))
