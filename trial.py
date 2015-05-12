@@ -63,6 +63,7 @@ class Trial(object):
             self.at_src = True
             odor = -1
             self.ins.odor = -1
+            self.ins.S = 0
 
         # store all data
         self.pos[self.ts, :] = self.ins.pos
@@ -86,14 +87,14 @@ class Trial(object):
 
         # add timepoints
         for tp_ctr in xrange(self.ts + 1):
+
             tp = models.Timepoint()
 
-            tp.xidx, tp.yidx, tp.zidx = self.pos_idx[tp_ctr]
             tp.hxyz = hxyz[tp_ctr]
-
+            tp.xidx, tp.yidx, tp.zidx = self.pos_idx[tp_ctr]
             tp.odor = self.odor[tp_ctr]
             tp.detected_odor = self.detected_odor[tp_ctr]
-
+            tp.src_entropy = self.entropies[tp_ctr]
             session.add(tp)
 
             # get timepoint start and end ids if first iteration
