@@ -111,4 +111,4 @@ class Trial(object):
         self.orm = models.Trial()
         self.orm.start_timepoint_id = self.start_tp_id
         self.orm.end_timepoint_id = self.end_tp_id
-        self.orm.trial_info = [self.info_orm]
+        self.orm.trial_info = self.info_orm

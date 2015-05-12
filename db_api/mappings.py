@@ -3,6 +3,8 @@ from sqlalchemy import Boolean, Integer, BigInteger, Float, String, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 
+from plume import Environment3d
+
 Base = declarative_base()
 
 
@@ -118,7 +120,7 @@ class Trial(Base):
     simulation_id = Column(String(255), ForeignKey('simulation.id'))
     geom_config_id = Column(Integer, ForeignKey('geom_config.id'))
 
-    trial_info = relationship("TrialInfo", backref='trial')
+    trial_info = relationship("TrialInfo", uselist=False, backref='trial')
 
     start_timepoint_id = Column(BigInteger)
     end_timepoint_id = Column(BigInteger)
