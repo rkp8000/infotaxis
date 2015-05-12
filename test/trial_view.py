@@ -1,14 +1,12 @@
-import numpy as np
 import matplotlib.pyplot as plt
 plt.ion()
 
-from insect import Insect
 from plume import BasicPlume
 from trial import Trial
 from plotting import plume_and_traj_3d as plot_trial
 
 from db_api import mappings
-from db_api.connect import engine, session, TESTCXN
+from db_api.connect import session
 
 from config.trial_view import *
 
@@ -17,20 +15,22 @@ from config.trial_view import *
 sim = session.query(mappings.Simulation).get(SIMULATIONID)
 print sim.id
 
-pl = BasicPlume(sim.env, sim.dt, orm=sim.pl)
-ins = Insect(sim.env, sim.dt, orm=sim.ins)
-
-pl.initialize()
-ins.initialize()
+pl = BasicPlume(sim.env, sim.dt, orm=sim.plume)
 
 _, axs = plt.subplots(2, 1)
 
 for tr_orm in sim.trials:
     [ax.cla() for ax in axs]
 
-    trial = Trial(pl, ins, orm=tr_orm, session=session)
+    pl.set_src_pos(tr_orm.geom_config.src_idx, is_idx=True)
+    pl.initialize()
+
+    trial = Trial(pl, None, orm=tr_orm)
+    trial.bind_timepoints(mappings, session)
+
+
     plot_trial(axs, trial)
     axs[0].set_title('trial {} from {}'.format(trial.orm.id, sim.id))
     plt.draw()
 
-    raw_input()
+    raw_input('Press enter to continue...')
