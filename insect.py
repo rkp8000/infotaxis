@@ -35,7 +35,7 @@ class Insect(object):
              np.array([0, 0, 1]),
              np.array([0, 0, -1]))
 
-    def __init__(self, env, dt=.01):
+    def __init__(self, env, dt=.01, orm=None):
         """Insect constructor."""
         # store environment
         self.env = env
@@ -59,7 +59,10 @@ class Insect(object):
         self.logprob = None
         self.logprob = None
 
-        self.orm = None
+        self._orm = None
+
+        if orm:
+            self.orm = orm
 
     def set_params(self, w=None, r=None, d=None, a=None, tau=None):
         """Set insect's parameters equal to the plume's (i.e., so it has perfect
@@ -143,11 +146,21 @@ class Insect(object):
 
         The models object must have as an attribute a model called Insect."""
 
-        self.orm = models.Insect(type=self.name)
-        self.orm.insect_params = [models.InsectParam(name=n, value=v) for n, v in self.params.items()]
+        self._orm = models.Insect(type=self.name)
+        self._orm.insect_params = [models.InsectParam(name=n, value=v) for n, v in self.params.items()]
 
         if sim:
-            self.orm.simulations = [sim]
+            self._orm.simulations = [sim]
+
+    @property
+    def orm(self):
+        return self._orm
+
+    @orm.setter
+    def orm(self, orm):
+        self._orm = orm
+        param_dict = {ip.name: ip.value for ip in self._orm.insect_params}
+        self.set_params(**param_dict)
 
     def get_loglike(self, odor, pos_idx):
         """Return the relevant portion of the source loglikelihood map (i.e.,

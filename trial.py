@@ -6,7 +6,7 @@ from math_tools.physics import heading
 
 class Trial(object):
 
-    def __init__(self, pl, ins, nsteps=1000):
+    def __init__(self, pl, ins, nsteps=1000, orm=None):
 
         self.pl = pl
         self.ins = ins
@@ -15,6 +15,8 @@ class Trial(object):
 
         self.at_src = False
 
+        if orm:
+            nsteps = orm.trial_info.duration
         # allocate arrays for storing data
         self.pos = np.zeros((nsteps, 3), dtype=float)
         self.pos_idx = np.zeros((nsteps, 3), dtype=int)
@@ -27,10 +29,14 @@ class Trial(object):
 
         self.start_tp_id, self.end_tp_id = None, None
 
-        self.orm = None
+        self._orm = None
 
-        # take first step
-        self.step(first_step=True)
+        if orm:
+            # initialize this trial from a trial stored in the database
+            self.orm = orm
+        else:
+            # take first step
+            self.step(first_step=True)
 
     def step(self, first_step=False):
 
@@ -103,12 +109,33 @@ class Trial(object):
                 self.start_tp_id = tp.id
                 self.end_tp_id = self.start_tp_id + self.ts
 
-    def set_orm(self, models):
-        self.info_orm = models.TrialInfo()
-        self.info_orm.duration = self.ts + 1
-        self.info_orm.found_src = self.at_src
+    def bind_timepoints(self, models, session):
 
-        self.orm = models.Trial()
-        self.orm.start_timepoint_id = self.start_tp_id
-        self.orm.end_timepoint_id = self.end_tp_id
-        self.orm.trial_info = self.info_orm
+        if not self._orm:
+            raise ValueError('Please set orm before binding timepoints!')
+
+        stp, etp = self._orm.start_timepoint_id, self._orm.end_timepoint_id
+        for ts, tp_id in enumerate(range(stp, etp+1)):
+            tp = session.query(models.Timepoint).get(tp_id)
+            self.pos_idx[ts] = tp.xidx, tp.yidx, tp.zidx
+            self.pos[ts] = self.pl.env.pos_from_idx(self.pos_idx[ts])
+            self.odor[ts] = tp.odor
+            self.detected_odor[ts] = tp.detected_odor
+            self.entropies[ts] = tp.src_entropy
+
+    def generate_orm(self, models):
+        self._orm = models.Trial()
+        self._orm.start_timepoint_id = self.start_tp_id
+        self._orm.end_timepoint_id = self.end_tp_id
+        self._orm.trial_info = models.TrialInfo()
+        self._orm.trial_info.duration = self.ts + 1
+        self._orm.trial_info.found_src = self.at_src
+
+    @property
+    def orm(self):
+        return self._orm
+
+    @orm.setter
+    def orm(self, orm):
+        self._orm = orm
+        self.ts = orm.trial_info.duration
