@@ -29,12 +29,11 @@ class Trial(object):
 
         self.start_tp_id, self.end_tp_id = None, None
 
-        self._orm = None
-
         if orm:
             # initialize this trial from a trial stored in the database
             self.orm = orm
         else:
+            self.orm = None
             # take first step
             self.step(first_step=True)
 
@@ -111,10 +110,10 @@ class Trial(object):
 
     def bind_timepoints(self, models, session):
 
-        if not self._orm:
+        if not self.orm:
             raise ValueError('Please set orm before binding timepoints!')
 
-        stp, etp = self._orm.start_timepoint_id, self._orm.end_timepoint_id
+        stp, etp = self.orm.start_timepoint_id, self.orm.end_timepoint_id
 
         for ts, tp_id in enumerate(range(stp, etp + 1)):
             tp = session.query(models.Timepoint).get(tp_id)
@@ -125,17 +124,9 @@ class Trial(object):
             self.entropies[ts] = tp.src_entropy
 
     def generate_orm(self, models):
-        self._orm = models.Trial()
-        self._orm.start_timepoint_id = self.start_tp_id
-        self._orm.end_timepoint_id = self.end_tp_id
-        self._orm.trial_info = models.TrialInfo()
-        self._orm.trial_info.duration = self.ts + 1
-        self._orm.trial_info.found_src = self.at_src
-
-    @property
-    def orm(self):
-        return self._orm
-
-    @orm.setter
-    def orm(self, orm):
-        self._orm = orm
+        self.orm = models.Trial()
+        self.orm.start_timepoint_id = self.start_tp_id
+        self.orm.end_timepoint_id = self.end_tp_id
+        self.orm.trial_info = models.TrialInfo()
+        self.orm.trial_info.duration = self.ts + 1
+        self.orm.trial_info.found_src = self.at_src
