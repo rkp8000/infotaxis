@@ -138,7 +138,7 @@ class Insect(object):
 
             self.loglike_map[odor_idx] = loglike
 
-    def set_orm(self, models, sim=None):
+    def generate_orm(self, models, sim=None):
         """Set up the object relational mapping of the insect.
 
         The models object must have as an attribute a model called Insect."""
