@@ -12,7 +12,7 @@ from plume import BasicPlume
 from trial import Trial
 
 from db_api import mappings
-from db_api.connect import engine, session, TESTCXN
+from db_api.connect import engine, session
 
 from config.generate_trials import *
 

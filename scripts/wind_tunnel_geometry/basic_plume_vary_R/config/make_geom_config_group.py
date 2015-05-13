@@ -5,7 +5,7 @@ ID = 'wind_tunnel_random_src_and_start'
 DESCRIPTION = 'Random source and start positions using wind tunnel geometry. Max durations all 1000 timesteps.'
 DURATION = 1000
 
-NGEOMCONFIGS = 4
+NGEOMCONFIGS = 200
 
 # ENVIRONMENT
 DT = .06  # (s)

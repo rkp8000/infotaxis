@@ -9,7 +9,7 @@ DESCRIPTION = ('Trials generated in a wind tunnel with a plume based on the'
                ' to true plume used in simulation.')
 GEOMCONFIGGROUP = 'wind_tunnel_random_src_and_start'
 
-HEADING_SMOOTHING = 2
+HEADING_SMOOTHING = 3
 
 # ENVIRONMENT
 DT = .06  # (s)
@@ -27,7 +27,7 @@ PLUME_PARAMS = {
                 'tau': 1000,  # particle lifetime (s)
                 }
 
-Rs = [5, 10, 50, 100, 500, 1000, 5000]
+Rs = [700, 800, 900, 1100, 1200, 1300, 1400]
 
 # INSECT
 LOGLIKE = binary_advec_diff_tavg
