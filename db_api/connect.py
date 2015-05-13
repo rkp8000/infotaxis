@@ -12,7 +12,7 @@ from sqlalchemy.orm import sessionmaker
 from cxn_vars import *
 
 TESTCXN = True
-URLTEMPLATE = 'mysql+mysqldb://{u}:{p}@{h}/{db}?unix_socket={sock}'
+URLTEMPLATE = 'mysql+mysqldb://{u}:{p}@{h}:{port}/{db}'
 
 
 if TESTCXN:
@@ -20,7 +20,7 @@ if TESTCXN:
 else:
     db = DB
 
-cxn_url = URLTEMPLATE.format(u=USER, p=PASSWORD, h=HOST, db=db, sock=UNIXSOCKET)
+cxn_url = URLTEMPLATE.format(u=USER, p=PASSWORD, h=HOST, port=PORT, db=db)
 engine = create_engine(cxn_url)
 engine.connect()
 
