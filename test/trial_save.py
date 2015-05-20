@@ -14,7 +14,7 @@ from insect import Insect
 from plume import BasicPlume
 from trial import Trial
 
-from db_api import models
+from db_api import mappings
 from db_api.connect import engine, session, TESTCXN
 
 from config.trial_save import *
@@ -23,13 +23,13 @@ from config.trial_save import *
 if not TESTCXN:
     raise ValueError('TESTCXN is not set to True. Aborting test...')
 
-models.Base.metadata.create_all(engine)
+mappings.Base.metadata.create_all(engine)
 
 # get geom_config_group
-geom_config_group = session.query(models.GeomConfigGroup).get(GEOMCONFIGGROUP)
+geom_config_group = session.query(mappings.GeomConfigGroup).get(GEOMCONFIGGROUP)
 
 # create simulation
-sim = models.Simulation()
+sim = mappings.Simulation()
 sim.id, sim.description, sim.total_trials = ID, DESCRIPTION, TOTALTRIALS
 sim.env, sim.dt = ENV, DT
 sim.heading_smoothing = HEADING_SMOOTHING
@@ -39,18 +39,18 @@ session.add(sim)
 # create and save plume
 pl = BasicPlume(env=ENV, dt=DT)
 pl.set_params(**PLUME_PARAMS)
-pl.generate_orm(models, sim=sim)
+pl.generate_orm(mappings, sim=sim)
 session.add(pl.orm)
 
 # create and save insect
 ins = Insect(env=ENV, dt=DT)
 ins.set_params(**PLUME_PARAMS)
 ins.loglike_function = LOGLIKE
-ins.generate_orm(models, sim=sim)
+ins.generate_orm(mappings, sim=sim)
 session.add(ins.orm)
 
 # create ongoing run
-ongoing_run = models.OngoingRun(trials_completed=0, simulations=[sim])
+ongoing_run = mappings.OngoingRun(trials_completed=0, simulations=[sim])
 session.add(ongoing_run)
 
 session.commit()
@@ -82,8 +82,8 @@ for tctr in range(TOTALTRIALS):
             break
 
     # save trial
-    trial.add_timepoints(models, session=session, heading_smoothing=sim.heading_smoothing)
-    trial.generate_orm(models)
+    trial.add_timepoints(mappings, session=session, heading_smoothing=sim.heading_smoothing)
+    trial.generate_orm(mappings)
     trial.orm.geom_config = geom_config
     trial.orm.simulation = sim
     session.add(trial.orm)
