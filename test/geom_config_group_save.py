@@ -2,7 +2,7 @@
 
 import numpy as np
 from db_api.connect import engine, session, TESTCXN
-from db_api.mappings import Base, GeomConfig, GeomConfigGroup
+from db_api.models import Base, GeomConfig, GeomConfigGroup
 
 from config.geom_config_group_save import *
 

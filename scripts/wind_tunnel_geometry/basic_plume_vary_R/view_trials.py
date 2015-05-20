@@ -5,7 +5,7 @@ from plume import BasicPlume
 from trial import Trial
 from plotting import plume_and_traj_3d as plot_trial
 
-from db_api import mappings
+from db_api import models
 from db_api.connect import session
 
 from config.view_trials import *
@@ -13,7 +13,7 @@ from config.view_trials import *
 
 for r in Rs:
 # get simulation
-    sim = session.query(mappings.Simulation).get(SIMULATIONID.format(r))
+    sim = session.query(models.Simulation).get(SIMULATIONID.format(r))
 
     pl = BasicPlume(sim.env, sim.dt, orm=sim.plume)
 
@@ -26,7 +26,7 @@ for r in Rs:
         pl.initialize()
 
         trial = Trial(pl, None, orm=tr_orm)
-        trial.bind_timepoints(mappings, session)
+        trial.bind_timepoints(models, session)
 
         plot_trial(axs, trial)
         axs[0].set_title('trial {} from {}'.format(trial.orm.id, sim.id))

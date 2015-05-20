@@ -3,7 +3,7 @@ from __future__ import division
 import numpy as np
 import matplotlib.pyplot as plt
 
-from db_api.mappings import Simulation
+from db_api.models import Simulation
 from db_api.connect import engine, session
 
 from config.wind_tunnel_basic_plume_vary_R import *
@@ -30,9 +30,7 @@ for sim in sims:
     mean_search_time_dict[r] = np.mean(search_times)
     std_search_time_dict[r] = np.std(search_times)
 
-
 # make figure
-plt.ion()
 fig, axs = plt.subplots(2, 1, sharex=True)
 
 axs[0].scatter(prob_found_src_dict.keys(), prob_found_src_dict.values())

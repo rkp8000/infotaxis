@@ -3,7 +3,7 @@
 import numpy as np
 
 from db_api.connect import engine, session
-from db_api.mappings import Base, GeomConfig, GeomConfigGroup
+from db_api.models import Base, GeomConfig, GeomConfigGroup
 
 from config.make_geom_config_group import *
 

@@ -11,24 +11,24 @@ from insect import Insect
 from plume import BasicPlume
 from trial import Trial
 
-from db_api import mappings
+from db_api import models
 from db_api.connect import engine, session
 
 from config.generate_trials import *
 
 
-mappings.Base.metadata.create_all(engine)
+models.Base.metadata.create_all(engine)
 
 # loop over all Rs (all simulations)
 for r in Rs:
 
     # create simulation
-    sim = mappings.Simulation()
+    sim = models.Simulation()
     sim.id, sim.description = ID.format(r), DESCRIPTION
     sim.env, sim.dt = ENV, DT
     sim.heading_smoothing = HEADING_SMOOTHING
     # bind geom_config_group
-    sim.geom_config_group = session.query(mappings.GeomConfigGroup).get(GEOMCONFIGGROUP)
+    sim.geom_config_group = session.query(models.GeomConfigGroup).get(GEOMCONFIGGROUP)
     sim.total_trials = len(sim.geom_config_group.geom_configs)
     session.add(sim)
 
@@ -36,18 +36,18 @@ for r in Rs:
     PLUME_PARAMS['r'] = r
     pl = BasicPlume(env=ENV, dt=DT)
     pl.set_params(**PLUME_PARAMS)
-    pl.generate_orm(mappings, sim=sim)
+    pl.generate_orm(models, sim=sim)
     session.add(pl.orm)
 
     # create and save insect with known plume parameters
     ins = Insect(env=ENV, dt=DT)
     ins.set_params(**PLUME_PARAMS)
     ins.loglike_function = LOGLIKE
-    ins.generate_orm(mappings, sim=sim)
+    ins.generate_orm(models, sim=sim)
     session.add(ins.orm)
 
     # create ongoing run
-    ongoing_run = mappings.OngoingRun(trials_completed=0, simulations=[sim])
+    ongoing_run = models.OngoingRun(trials_completed=0, simulations=[sim])
     session.add(ongoing_run)
 
     session.commit()
@@ -76,8 +76,8 @@ for r in Rs:
                 break
 
         # save trial
-        trial.add_timepoints(mappings, session=session, heading_smoothing=sim.heading_smoothing)
-        trial.generate_orm(mappings)
+        trial.add_timepoints(models, session=session, heading_smoothing=sim.heading_smoothing)
+        trial.generate_orm(models)
         trial.orm.geom_config = geom_config
         trial.orm.simulation = sim
         session.add(trial.orm)
