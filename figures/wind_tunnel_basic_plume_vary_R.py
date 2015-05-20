@@ -19,7 +19,7 @@ std_search_time_dict = {}
 for sim in sims:
     # get r
     pps = sim.plume.plume_params
-    r = [pp.value for pp in pps if pp.name=='r'][0]
+    r = [pp.value for pp in pps if pp.name == 'r'][0]
 
     trial_infos = [trial.trial_info for trial in sim.trials]
 

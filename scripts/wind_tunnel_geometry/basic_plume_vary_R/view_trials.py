@@ -12,7 +12,7 @@ from config.view_trials import *
 
 
 for r in Rs:
-# get simulation
+    # get simulation
     sim = session.query(models.Simulation).get(SIMULATIONID.format(r))
 
     pl = BasicPlume(sim.env, sim.dt, orm=sim.plume)

@@ -16,6 +16,7 @@ URLTEMPLATE = 'mysql+mysqldb://{u}:{p}@{h}:{port}/{db}'
 
 
 if TESTCXN:
+    print 'CONNECTED TO TEST DATABASE'
     db = TESTDB
 else:
     db = DB
