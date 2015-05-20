@@ -128,7 +128,8 @@ class Trial(Base):
 
     trial_info = relationship("TrialInfo", uselist=False, backref='trial')
 
-    timepoints = relationship("Timepoint", backref='trial', order_by='timepoint.id')
+    start_timepoint_id = Column(BigInteger)
+    end_timepoint_id = Column(BigInteger)
 
 
 class TrialInfo(Base):
@@ -188,8 +189,6 @@ class Timepoint(Base):
     __tablename__ = 'timepoint'
 
     id = Column(BigInteger, primary_key=True)
-
-    trial_id = Column(Integer, ForeignKey('trial.id'))
 
     xidx = Column(Integer)
     yidx = Column(Integer)
