@@ -13,10 +13,10 @@ from sqlalchemy.orm import sessionmaker
 TESTCXN = True
 
 if TESTCXN:
-    print 'CONNECTED TO TEST DATABASE'
+    print 'CONNECTED TO INFOTAXIS TEST DATABASE'
     engine = create_engine(os.environ['TEST_INFOTAXIS_DB_CXN_URL'])
 else:
-    print 'CONNECTED TO PRODUCTION DATABASE'
+    print 'CONNECTED TO INFOTAXIS PRODUCTION DATABASE'
     engine = create_engine(os.environ['INFOTAXIS_DB_CXN_URL'])
 
 engine.connect()
