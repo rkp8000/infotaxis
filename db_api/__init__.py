@@ -11,7 +11,7 @@ def add_script_execution(script_id, session, multi_use=False):
     # check if script_id is in Script table
     script = session.query(Script).get(script_id)
     if not script:
-        raise LookupError('{} not found in table "script"!'.format(script_id))
+        raise LookupError('"{}" not found in table "script"!'.format(script_id))
 
     # raise error if script has already been executed and multi use is false
     if not multi_use:
@@ -24,4 +24,3 @@ def add_script_execution(script_id, session, multi_use=False):
 
     # add script execution to database
     session.add(ScriptExecution(script=script, commit=latest_commit, timestamp=datetime.now()))
-    session.commit()
