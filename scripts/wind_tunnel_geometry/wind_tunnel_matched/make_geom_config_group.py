@@ -34,7 +34,7 @@ try:
                 start_tp = wt_session.query(wt_models.Timepoint).get(traj.start_timepoint_id)
                 start_idx = ENV.idx_from_pos((start_tp.x, start_tp.y, start_tp.z))
 
-                duration = int(np.ceil(traj.duration / DT))
+                duration = int(np.ceil(traj.duration * .01 / DT))
                 traj_configs += [(start_idx, duration)]
 
         # create geom configs from all starting positions
