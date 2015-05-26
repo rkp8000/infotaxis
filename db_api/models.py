@@ -6,6 +6,8 @@ from sqlalchemy.orm import relationship, backref
 
 from plume import Environment3d
 
+from connect import engine
+
 Base = declarative_base()
 
 
@@ -221,3 +223,7 @@ class ScriptExecution(Base):
     script_id = Column(String(255), ForeignKey('script.id'))
     commit = Column(String(255))
     timestamp = Column(DateTime)
+
+
+if __name__ == '__main__':
+    Base.metadata.create_all(engine)
