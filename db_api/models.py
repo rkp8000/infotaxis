@@ -1,6 +1,6 @@
 import numpy as np
 from sqlalchemy import Column, ForeignKey, Sequence
-from sqlalchemy import Boolean, Integer, BigInteger, Float, String, Text
+from sqlalchemy import Boolean, Integer, BigInteger, Float, String, Text, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 
@@ -200,3 +200,23 @@ class Timepoint(Base):
     detected_odor = Column(Float)
 
     src_entropy = Column(Float)
+
+
+class Script(Base):
+    __tablename__ = 'script'
+
+    id = Column(String(255), primary_key=True)
+
+    description = Column(Text)
+    type = Column(String(255))
+
+    script_runs = relationship("ScriptRun", backref='script')
+
+
+class ScriptExecution(Base):
+    __tablename__ = 'script_execution'
+
+    id = Column(Integer, primary_key=True)
+
+    script_id = Column(String(255), ForeignKey('script.id'))
+    timestamp = Column(DateTime)
