@@ -21,7 +21,7 @@ try:
     for odor_state in ODORSTATES:
         geom_config_group_id = GEOMCONFIGGROUPID + '_odor_' + odor_state
         geom_config_group = GeomConfigGroup(id=geom_config_group_id)
-        geom_config_group.description = GEOMCONFIGGROUPDESCRIPTION
+        geom_config_group.description = GEOMCONFIGGROUPDESCRIPTION.format(EXPERIMENTID, odor_state)
 
         print 'current geom_config_group: {}'.format(geom_config_group_id)
 
