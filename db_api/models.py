@@ -210,7 +210,7 @@ class Script(Base):
     description = Column(Text)
     type = Column(String(255))
 
-    script_runs = relationship("ScriptRun", backref='script')
+    script_executions = relationship("ScriptExecution", backref='script')
 
 
 class ScriptExecution(Base):
@@ -219,4 +219,5 @@ class ScriptExecution(Base):
     id = Column(Integer, primary_key=True)
 
     script_id = Column(String(255), ForeignKey('script.id'))
+    commit = Column(String(255))
     timestamp = Column(DateTime)
