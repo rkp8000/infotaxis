@@ -223,6 +223,7 @@ class ScriptExecution(Base):
     script_id = Column(String(255), ForeignKey('script.id'))
     commit = Column(String(255))
     timestamp = Column(DateTime)
+    notes = Column(Text)
 
 
 if __name__ == '__main__':
