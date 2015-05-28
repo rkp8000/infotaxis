@@ -5,7 +5,7 @@ from git import Repo
 from models import Script, ScriptExecution
 
 
-def add_script_execution(script_id, session, multi_use=False):
+def add_script_execution(script_id, session, multi_use=False, notes=None):
     """Write the script execution to the database."""
 
     # check if script_id is in Script table
@@ -23,4 +23,4 @@ def add_script_execution(script_id, session, multi_use=False):
     latest_commit = repo.commit('master')
 
     # add script execution to database
-    session.add(ScriptExecution(script=script, commit=latest_commit, timestamp=datetime.now()))
+    session.add(ScriptExecution(script=script, commit=latest_commit, timestamp=datetime.now()), notes=notes)
