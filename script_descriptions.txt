@@ -1,3 +1,8 @@
-ID: test_script
-TYPE: test_type
-This is a test description.
+ID: make_geom_config_group_wind_tunnel_matched
+TYPE: data_generating
+Looks up all starting positions from wind tunnel data and converts them to infotaxis-discretized starting indexes.
+
+ID: generate_wind_tunnel_matched_trajectories
+TYPE: data_generating
+Generate a set of trajectories inside a theoretical wind tunnel using starting positions and trajectory durations taken
+from actual wind tunnel data.
