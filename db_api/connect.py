@@ -17,7 +17,11 @@ if TESTCXN:
     engine = create_engine(os.environ['TEST_INFOTAXIS_DB_CXN_URL'])
 else:
     print 'CONNECTED TO INFOTAXIS PRODUCTION DATABASE'
-    engine = create_engine(os.environ['INFOTAXIS_DB_CXN_URL'])
+    x = raw_input('Are you sure you want to connect to the production database [y or n]?')
+    if x.lower() == 'y':
+        engine = create_engine(os.environ['INFOTAXIS_DB_CXN_URL'])
+    else:
+        raise RuntimeError('User prevented write access to database.')
 
 engine.connect()
 
