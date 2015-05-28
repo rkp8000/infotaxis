@@ -23,4 +23,4 @@ def add_script_execution(script_id, session, multi_use=False, notes=None):
     latest_commit = repo.commit('master')
 
     # add script execution to database
-    session.add(ScriptExecution(script=script, commit=latest_commit, timestamp=datetime.now()), notes=notes)
+    session.add(ScriptExecution(script=script, commit=latest_commit, timestamp=datetime.now(), notes=notes))
