@@ -1,4 +1,8 @@
 from __future__ import division
+
+SCRIPTID = 'make_geom_config_group_wind_tunnel_matched'
+SCRIPTNOTES = 'Get and add wind tunnel geometric configurations for 0.4 m/s wind.'
+
 import imp
 import numpy as np
 
@@ -14,7 +18,7 @@ wt_models = imp.load_source('db_api.models', '/Users/rkp/Dropbox/Repositories/wi
 wt_session = wt_connect.session
 
 # add script execution to database
-add_script_execution(script_id=SCRIPTID, session=session, multi_use=True)
+add_script_execution(script_id=SCRIPTID, session=session, multi_use=True, notes=SCRIPTNOTES)
 
 try:
     # loop over all odor states

@@ -2,9 +2,7 @@ import numpy as np
 
 from plume import Environment3d
 
-SCRIPTID = 'make_geom_config_group_wind_tunnel_matched'
-
-EXPERIMENTID = 'fruitfly_0.6mps_checkerboard_floor'
+EXPERIMENTID = 'fruitfly_0.4mps_checkerboard_floor'
 ODORSTATES = ['on', 'none', 'afterodor']
 
 GEOMCONFIGGROUPID = 'wind_tunnel_matched_' + EXPERIMENTID
