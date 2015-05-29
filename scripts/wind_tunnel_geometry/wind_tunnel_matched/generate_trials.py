@@ -1,6 +1,7 @@
 """Generate infotaxis trials in simulated wind tunnel with simulated plume."""
 
 SCRIPTID = 'generate_wind_tunnel_matched_trials'
+SCRIPTNOTES = 'Create 1000 trials using 0.4 m/s wind and no odor plume.'
 
 import numpy as np
 
@@ -9,9 +10,13 @@ from plume import CollimatedPlume
 from trial import Trial
 
 from db_api import models
-from db_api.connect import engine, session
+from db_api.connect import session
+from db_api import add_script_execution
 
 from config.generate_trials import *
+
+# add script execution to database
+add_script_execution(SCRIPTID, session=session, multi_use=True, notes=SCRIPTNOTES)
 
 # get geom_config_group
 geom_config_group = session.query(models.GeomConfigGroup).get(GEOMCONFIGGROUPID)
@@ -19,17 +24,18 @@ geom_config_group = session.query(models.GeomConfigGroup).get(GEOMCONFIGGROUPID)
 # create simulation
 sim = models.Simulation(id=SIMULATIONID, description=SIMULATIONDESCRIPTION)
 sim.env, sim.dt = ENV, DT
+sim.total_trials = TOTALTRIALS
 sim.heading_smoothing = HEADINGSMOOTHING
 sim.geom_config_group = geom_config_group
 session.add(sim)
 
-# create and save plume
+# create plume
 pl = CollimatedPlume(env=ENV, dt=DT)
 pl.set_params(**PLUMEPARAMS)
 pl.generate_orm(models, sim=sim)
 session.add(pl.orm)
 
-# create and save insect with known plume parameters
+# create insect
 ins = Insect(env=ENV, dt=DT)
 ins.set_params(**INSECTPARAMS)
 ins.loglike_function = LOGLIKE
@@ -43,7 +49,7 @@ session.add(ongoing_run)
 session.commit()
 
 # generate trials
-for tctr in range(NTRIALS):
+for tctr in range(TOTALTRIALS):
 
     # randomly pick geom config
     geom_config = np.random.choice(geom_config_group.geom_configs)
