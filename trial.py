@@ -60,8 +60,11 @@ class Trial(object):
         self.ts += 1
 
         # calculate distance to source
-        self.dist_to_src[self.ts] = np.sum(np.abs(np.subtract(self.ins.pos_idx,
-                                                              self.pl.src_pos_idx)))
+        if self.pl.src_pos_idx:
+            self.dist_to_src[self.ts] = np.sum(np.abs(np.subtract(self.ins.pos_idx,
+                                                                  self.pl.src_pos_idx)))
+        else:
+            self.dist_to_src[self.ts] = -1
 
         # check if insect has found source
         if self.dist_to_src[self.ts] == 0:
