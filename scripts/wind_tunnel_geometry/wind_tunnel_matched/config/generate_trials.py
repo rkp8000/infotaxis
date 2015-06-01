@@ -5,13 +5,14 @@ from logprob_odor import binary_advec_diff_tavg
 
 SIMULATIONID = 'wind_tunnel_matched_fruitfly_0.4mps_odor_off'
 SIMULATIONDESCRIPTION = 'Creates large set of trajectories with starting positions and durations drawn randomly from ' \
-                        'true wind tunnel dataset for fruit flies flying in 0.4 m/s wind.'
+                        'true wind tunnel dataset for fruit flies flying in 0.4 m/s wind with no odor present.'
 
 GEOMCONFIGGROUPID = 'wind_tunnel_matched_fruitfly_0.4mps_checkerboard_floor_odor_none'
+# make sure to set max plume conc to zero if no odor plume!
 
 HEADINGSMOOTHING = 3
 
-TOTALTRIALS = 50
+TOTALTRIALS = 1000
 
 # ENVIRONMENT
 DT = .06  # (s)
@@ -22,7 +23,7 @@ ENV = Environment3d(XRBINS, YRBINS, ZRBINS)
 
 # PLUME PARAMS
 PLUMEPARAMS = {
-               'max_conc': 488,
+               'max_conc': 0,
                'threshold': 10,
                'ymean': 0.0105,
                'zmean': 0.0213,
