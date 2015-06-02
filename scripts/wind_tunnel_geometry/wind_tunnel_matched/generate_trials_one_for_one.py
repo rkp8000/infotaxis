@@ -1,7 +1,7 @@
 """Generate infotaxis trials in simulated wind tunnel with simulated plume."""
 
 SCRIPTID = 'generate_wind_tunnel_matched_trials_one_for_one'
-SCRIPTNOTES = 'Create one trial for each wind tunnel trajectory using 0.4 m/s wind and no odor plume, using geometric configurations from no odor plume case.'
+SCRIPTNOTES = 'Create one trial for each wind tunnel trajectory using 0.4 m/s wind and after odor plume, using geometric configurations from after odor plume case.'
 
 import numpy as np
 
@@ -50,13 +50,8 @@ session.add(ongoing_run)
 session.commit()
 
 # generate trials
-for tctr in range(total_trials):
-
-    if tctr > MAXTRIALNUMBER:
-        break
-
-    # pick geom config
-    geom_config = geom_config_group.geom_configs[tctr]
+tctr = 0
+for geom_config in geom_config_group.geom_configs:
 
     # set insect starting position
     ins.set_pos(geom_config.start_idx, is_idx=True)
@@ -88,3 +83,4 @@ for tctr in range(total_trials):
 
     # commit
     session.commit()
+    tctr += 1
