@@ -226,5 +226,16 @@ class ScriptExecution(Base):
     notes = Column(Text)
 
 
+class GeomConfigRealTrajectoryExtension(Base):
+    __tablename__ = 'geom_config_real_trajectory_extension'
+
+    id = Column(Integer, primary_key=True)
+
+    geom_config_id = Column(Integer, ForeignKey('geom_config.id'))
+    real_trajectory_id = Column(String(255))
+
+    geom_config = relationship("GeomConfig", backref='geom_config_real_trajectory_extensions')
+
+
 if __name__ == '__main__':
     Base.metadata.create_all(engine)
