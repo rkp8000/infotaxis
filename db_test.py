@@ -14,28 +14,27 @@ class TruismTestCase(unittest.TestCase):
 
 class ModelTestCase(unittest.TestCase):
 
-    def test_geom_config_real_trajectory_extension(self):
+    def test_geom_config_extension_real_trajectory(self):
 
-        gcrte = models.GeomConfigRealTrajectoryExtension()
+        gcert = models.GeomConfigExtensionRealTrajectory()
         geom_config0 = session.query(models.GeomConfig).first()
 
-        gcrte.geom_config = geom_config0
-        gcrte.real_trajectory_id = 'test_trajectory_id'
+        gcert.geom_config = geom_config0
+        gcert.real_trajectory_id = 'test_trajectory_id'
 
-        session.add(gcrte)
+        session.add(gcert)
 
-        # make sure geom_config_real_trajectory_extension gets added correctly
-        self.assertTrue(gcrte in geom_config0.geom_config_real_trajectory_extensions)
-        self.assertEqual(geom_config0.geom_config_real_trajectory_extensions[-1].real_trajectory_id,
+        self.assertEqual(gcert, geom_config0.geom_config_extension_real_trajectory)
+        self.assertEqual(geom_config0.geom_config_extension_real_trajectory.real_trajectory_id,
                          'test_trajectory_id')
 
         # try querying the join table
-        q = session.query(models.GeomConfig, models.GeomConfigRealTrajectoryExtension). \
-            filter(models.GeomConfig.id == models.GeomConfigRealTrajectoryExtension.geom_config_id). \
-            filter(models.GeomConfigRealTrajectoryExtension.real_trajectory_id == 'test_trajectory_id').all()
+        q = session.query(models.GeomConfig, models.GeomConfigExtensionRealTrajectory). \
+            filter(models.GeomConfig.id == models.GeomConfigExtensionRealTrajectory.geom_config_id). \
+            filter(models.GeomConfigExtensionRealTrajectory.real_trajectory_id == 'test_trajectory_id').all()
 
-        gc, gcrte = q[0]
-        self.assertEqual(gcrte.real_trajectory_id, 'test_trajectory_id')
+        gc, gcert = q[0]
+        self.assertEqual(gcert.real_trajectory_id, 'test_trajectory_id')
 
         session.rollback()
 
