@@ -1,7 +1,7 @@
 """Generate infotaxis trials in simulated wind tunnel with simulated plume."""
 
 SCRIPTID = 'generate_wind_tunnel_matched_trials_one_for_one'
-SCRIPTNOTES = 'Create one trial for each wind tunnel trajectory using 0.4 m/s wind and after odor plume, using geometric configurations from after odor plume case.'
+SCRIPTNOTES = 'Create one trial for each wind tunnel trajectory using 0.4 m/s wind and odor plume on, using geometric configurations from odor plume on case.'
 
 import numpy as np
 
