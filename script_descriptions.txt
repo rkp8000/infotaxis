@@ -10,3 +10,8 @@ from actual wind tunnel data.
 ID: extend_wind_tunnel_matched_geom_configs_with_trajectory_ids
 TYPE: data_cleaning
 Go through wind tunnel database and note actual trajectory ids associated with each geom_config.
+
+ID: generate_wind_tunnel_matched_trials_one_for_one
+TYPE: data_generating
+Generate a set of trajectories inside a theoretical wind tunnel using starting positions and trajectory durations taken
+from actual wind tunnel data. Like 'generate_wind_tunnel_matched_trials', but making sure to generate one infotaxis trial for every wind tunnel trial.
