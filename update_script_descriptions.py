@@ -29,5 +29,6 @@ for script_id, info in desc_dict.items():
         session.add(script)
         session.commit()
     except Exception, e:
+        session.rollback()
         print e
         continue
