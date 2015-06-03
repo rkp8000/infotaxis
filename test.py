@@ -3,9 +3,9 @@ import unittest
 
 import numpy as np
 
-from plume import BasicPlume, Environment3d
+from plume import BasicPlume, CollimatedPlume, Environment3d
 from insect import Insect
-from trial import Trial
+from trial import Trial, TrialFromTraj
 from logprob_odor import binary_advec_diff_tavg
 
 
@@ -13,6 +13,55 @@ class TruismsTestCase(unittest.TestCase):
 
     def test_truisms(self):
         self.assertTrue(True)
+
+
+class DiscretizationTestCase(unittest.TestCase):
+
+    def setUp(self):
+        xrbins = np.linspace(0, 1., 11)
+        yrbins = np.linspace(0, 1., 11)
+        zrbins = np.linspace(0, 1., 11)
+        self.env = Environment3d(xrbins, yrbins, zrbins)
+
+        self.pl = CollimatedPlume(env=self.env, dt=.01)
+        self.pl.set_params(20, 10, .5, .5, .5, .5)
+
+    def test_trajectory_discretization_by_trial_instance(self):
+
+        # this trajectory should have 11 timesteps when mapped onto the grid in env
+        x = np.linspace(.15, .75, 30)
+        y = np.linspace(.45, .05, 30)
+        z = 0.55 * np.ones((30,))
+        positions = np.array([x, y, z]).T
+
+        trial = TrialFromTraj(positions, self.pl)
+
+        # check to make sure duration is correct
+        self.assertEqual(trial.ts, 10)
+
+        # loop over some more random trajectories
+        for _ in range(5):
+
+            x = 0.5 + np.random.normal(0, .003, (1000,)).sum()
+            y = 0.5 + np.random.normal(0, .003, (1000,)).sum()
+            z = 0.5 + np.random.normal(0, .003, (1000,)).sum()
+            positions = np.array([x, y, z]).T
+            # truncate positions if any of them go beyond 1 or 0
+            outside_env = [ts for ts, pos in enumerate(positions) if np.any(pos > 1) or np.any(pos < 0)]
+            if outside_env:
+                positions = positions[:outside_env[0]]
+
+            # check that each pos idx is one step away from the previous pos idx
+            for pi_ctr in range(trial.ts):
+                this_pos_idx = np.array(trial.pos_idx[pi_ctr])
+                next_pos_idx = np.array(trial.pos_idx[pi_ctr + 1])
+                self.assertEqual(np.abs(this_pos_idx - next_pos_idx).sum(), 1)
+
+            # check that first and last pos idx are what env would give them
+            first_pos_idx_env = np.array(self.env.idx_from_pos[positions[0]])
+            last_pos_idx_env = np.array(self.env.idx_from_pos[positions[-1]])
+            np.testing.assert_array_equal(first_pos_idx_env, np.array(trial.pos_idx[0]))
+            np.testing.assert_array_equal(last_pos_idx_env, np.array(trial.pos_idx[trial.ts]))
 
 
 class MathTestCase(unittest.TestCase):
