@@ -26,18 +26,38 @@ class DiscretizationTestCase(unittest.TestCase):
         self.pl = CollimatedPlume(env=self.env, dt=.01)
         self.pl.set_params(20, 10, .5, .5, .5, .5)
 
-    def test_trajectory_discretization_by_trial_instance(self):
+    def test_straight_line_trajectory_discretization_by_trial_instance(self):
 
         # this trajectory should have 11 timesteps when mapped onto the grid in env
-        x = np.linspace(.15, .75, 30)
-        y = np.linspace(.45, .05, 30)
-        z = 0.55 * np.ones((30,))
+        x = 0.55 * np.ones((30,))
+        y = np.linspace(.15, .75, 30)
+        z = np.linspace(.45, .05, 30)
         positions = np.array([x, y, z]).T
 
         trial = TrialFromTraj(positions, self.pl)
 
         # check to make sure duration is correct
         self.assertEqual(trial.ts, 10)
+
+    def test_perfectly_diagonal_trajectory_discretization_by_trial_instance(self):
+        x = np.linspace(.15, .75, 40)
+        y = np.linspace(.15, .75, 40)
+        z = np.linspace(.15, .75, 40)
+        positions = np.array([x, y, z]).T
+
+        trial = TrialFromTraj(positions, self.pl)
+
+        # check to make sure duration is correct
+        true_duration = 19
+        self.assertEqual(trial.ts + 1, true_duration)
+
+        # check that each pos idx is one step away from the previous pos idx
+        for pi_ctr in range(trial.ts):
+            this_pos_idx = np.array(trial.pos_idx[pi_ctr])
+            next_pos_idx = np.array(trial.pos_idx[pi_ctr + 1])
+            self.assertEqual(np.abs(this_pos_idx - next_pos_idx).sum(), 1)
+
+    def test_random_walk_trajectory_discretization_by_trial_instance(self):
 
         # loop over some more random trajectories
         for _ in range(5):
