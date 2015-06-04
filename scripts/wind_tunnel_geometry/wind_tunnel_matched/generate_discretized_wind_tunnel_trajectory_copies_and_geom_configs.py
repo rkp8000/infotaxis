@@ -11,7 +11,7 @@ from db_api.connect import session
 from db_api import models, add_script_execution
 
 from plumes import CollimatedPlume
-from insect import ForceableInsect
+from insect import Insect
 from trial import TrialFromPositionSequence
 
 # get wind tunnel connection and models
