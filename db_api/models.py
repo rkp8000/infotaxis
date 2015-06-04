@@ -231,6 +231,8 @@ class GeomConfigExtensionRealTrajectory(Base):
 
     id = Column(Integer, primary_key=True)
 
+    avg_dt = Column(Float)
+
     geom_config_id = Column(Integer, ForeignKey('geom_config.id'))
     trial_id = Column(Integer, ForeignKey('trial.id'))
     real_trajectory_id = Column(String(255))
