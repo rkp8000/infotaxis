@@ -71,6 +71,8 @@ class DiscretizationTestCase(unittest.TestCase):
             if outside_env:
                 positions = positions[:outside_env[0]]
 
+            trial = TrialFromTraj(positions, self.pl)
+
             # check that each pos idx is one step away from the previous pos idx
             for pi_ctr in range(trial.ts):
                 this_pos_idx = np.array(trial.pos_idx[pi_ctr])
