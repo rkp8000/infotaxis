@@ -8,8 +8,10 @@ import imp
 import numpy as np
 
 from db_api.connect import session
-from db_api import models
-from db_api import add_script_execution
+from db_api import models, add_script_execution
+
+from plumes import CollimatedPlume
+from insect import ForceableInsect
 
 # get wind tunnel connection and models
 wt_session = imp.load_source('db_api.connect', os.path.join(WT_REPO, 'db_api', 'connect.py')).session
