@@ -12,6 +12,7 @@ from db_api import models, add_script_execution
 
 from plumes import CollimatedPlume
 from insect import ForceableInsect
+from trial import TrialFromPositionSequence
 
 # get wind tunnel connection and models
 wt_session = imp.load_source('db_api.connect', os.path.join(WT_REPO, 'db_api', 'connect.py')).session
@@ -75,7 +76,7 @@ def main(traj_limit=None):
                 positions = traj.get_positions(wt_session)
 
                 # create discretized version of trajectory
-                trial = TrialFromTraj(positions, pl, ins)
+                trial = TrialFromPositionSequence(positions, pl, ins)
 
                 # get geom_config, add extensions
                 geom_config = trial.make_geom_config(models.GeomConfig)
