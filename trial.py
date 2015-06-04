@@ -133,3 +133,17 @@ class Trial(object):
         self.orm.trial_info = models.TrialInfo()
         self.orm.trial_info.duration = self.ts + 1
         self.orm.trial_info.found_src = self.at_src
+
+
+class TrialFromPositionSequence(Trial):
+    """For trials that are constructed by discretizing an empirical trajectory"""
+
+    def __init__(self, positions, pl, ins=None):
+        """
+        :param positions: N x 3 array of positions
+        :param pl: plume object used for discretization
+        """
+
+        self.pl = pl
+
+        # fill in all timepoints from positions using the plume's environment and odor profile
