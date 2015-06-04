@@ -142,8 +142,65 @@ class TrialFromPositionSequence(Trial):
         """
         :param positions: N x 3 array of positions
         :param pl: plume object used for discretization
+        :param ins: insect object used to calculate source position probabilities
         """
 
-        self.pl = pl
+        # call parent __init__ method
+        super(TrialFromPositionSequence, self).__init__(pl, ins)
 
-        # fill in all timepoints from positions using the plume's environment and odor profile
+        # discretize trajectory positions and get/set average dt
+        self.forced_pos_idxs = self.pl.env.discretize_position_sequence(positions)
+        self.avg_dt = (0.01 * len(positions)) / len(self.forced_pos_idxs)
+        if ins:
+            self.ins.dt = self.avg_dt
+            self.ins.initialize()
+
+        # step through all positions and fill in timepoints, etc
+        self.step(forced_pos_idx=self.forced_pos_idxs[0], first_step=True)
+
+        for forced_pos_idx in self.forced_pos_idxs[1:]:
+            self.step(forced_pos_idx=forced_pos_idx)
+
+    def step(self, forced_pos_idx, first_step=False):
+
+        if not first_step:
+            self.ins.calc_util()
+
+        self.ins.move(forced_pos_idx)
+
+        # get concentration and odor
+        odor = self.pl.conc[tuple(self.ins.pos_idx)]
+        detected_odor = self.pl.sample(self.ins.pos_idx)
+
+        # let insect sample odor
+        self.ins.odor = detected_odor
+        # self.ins.sample(detected_odor)
+
+        # update source probability
+        self.ins.update_src_prob()
+
+        # update plume
+        self.pl.update()
+
+        self.ts += 1
+
+        # calculate distance to source
+        if self.pl.src_pos_idx:
+            self.dist_to_src[self.ts] = np.sum(np.abs(np.subtract(self.ins.pos_idx,
+                                                                  self.pl.src_pos_idx)))
+        else:
+            self.dist_to_src[self.ts] = -1
+
+        # check if insect has found source
+        if self.dist_to_src[self.ts] == 0:
+            self.at_src = True
+            odor = -1
+            self.ins.odor = -1
+            self.ins.S = 0
+
+        # store all data
+        self.pos[self.ts, :] = self.ins.pos
+        self.pos_idx[self.ts, :] = self.ins.pos_idx
+        self.odor[self.ts] = odor
+        self.detected_odor[self.ts] = self.ins.odor
+        self.entropies[self.ts] = self.ins.S
