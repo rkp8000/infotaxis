@@ -16,10 +16,10 @@ class DatabaseTest(unittest.TestCase):
         gcgs = session.query(models.GeomConfigGroup). \
             filter(models.GeomConfigGroup.id.like('wind_tunnel_matched_discretized'))
 
-        self.assertEquals(len(gcgs), 9)
+        self.assertEqual(len(gcgs), 9)
 
         for gcg in gcgs:
-            self.assertEquals(len(gcg.geom_configs), TRAJ_LIMIT)
+            self.assertEqual(len(gcg.geom_configs), TRAJ_LIMIT)
 
 
 if __name__ == '__main__':
