@@ -1,7 +1,7 @@
 from __future__ import division
 
 SCRIPT_ID = 'generate_discretized_wind_tunnel_trajectory_copies_and_geom_configs'
-SCRIPT_NOTES = 'Run for all wind speeds and all odor states with an insect assuming a binary advection diffusion plume with a high diffusivity.'
+SCRIPT_NOTES = 'Run for all experiments and odor states.'
 
 import os
 import imp
@@ -19,7 +19,7 @@ wt_session = imp.load_source('db_api.connect', os.path.join(WT_REPO, 'db_api', '
 wt_models = imp.load_source('db_api.models', os.path.join(WT_REPO, 'db_api', 'models.py'))
 
 # get configuration
-from config.generate_discretized_wind_tunnel_trajectory_copies_and_geom_configs import *
+from config.generate_discretized_wind_tunnel_trajectory_copies import *
 
 
 def main(traj_limit=None):
