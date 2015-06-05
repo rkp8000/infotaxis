@@ -5,7 +5,7 @@ import numpy as np
 
 from plume import BasicPlume, CollimatedPlume, Environment3d
 from insect import Insect
-from trial import Trial, TrialFromTraj
+from trial import Trial, TrialFromPositionSequence
 from logprob_odor import binary_advec_diff_tavg
 
 
@@ -34,7 +34,7 @@ class DiscretizationTestCase(unittest.TestCase):
         z = np.linspace(.45, .05, 30)
         positions = np.array([x, y, z]).T
 
-        trial = TrialFromTraj(positions, self.pl)
+        trial = TrialFromPositionSequence(positions, self.pl)
 
         # check to make sure duration is correct
         self.assertEqual(trial.ts, 10)
@@ -45,7 +45,7 @@ class DiscretizationTestCase(unittest.TestCase):
         z = np.linspace(.15, .75, 40)
         positions = np.array([x, y, z]).T
 
-        trial = TrialFromTraj(positions, self.pl)
+        trial = TrialFromPositionSequence(positions, self.pl)
 
         # check to make sure duration is correct
         true_duration = 19
@@ -71,7 +71,7 @@ class DiscretizationTestCase(unittest.TestCase):
             if outside_env:
                 positions = positions[:outside_env[0]]
 
-            trial = TrialFromTraj(positions, self.pl)
+            trial = TrialFromPositionSequence(positions, self.pl)
 
             # check that each pos idx is one step away from the previous pos idx
             for pi_ctr in range(trial.ts):
@@ -141,8 +141,8 @@ class MathTestCase(unittest.TestCase):
 
         tr = Trial(pl=pl, ins=ins)
 
-        self.assertTrue(np.isinf(ins.logprob[start_idx]))
-        self.assertLess(ins.logprob[start_idx], 0)
+        self.assertTrue(np.isinf(tr.ins.logprob[start_idx]))
+        self.assertLess(tr.ins.logprob[start_idx], 0)
 
         uw_idx = list(start_idx)
         uw_idx[0] -= 3
