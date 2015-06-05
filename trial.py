@@ -138,43 +138,39 @@ class Trial(object):
 class TrialFromPositionSequence(Trial):
     """For trials that are constructed by discretizing an empirical trajectory"""
 
-    def __init__(self, positions, pl, ins=None):
+    def __init__(self, positions, pl, ins):
         """
         :param positions: N x 3 array of positions
         :param pl: plume object used for discretization
         :param ins: insect object used to calculate source position probabilities
         """
 
+        # discretize trajectory positions and get/set average dt for insect
+        self.forced_pos_idxs = self.pl.env.discretize_position_sequence(positions)
+        self.avg_dt = (0.01 * len(positions)) / len(self.forced_pos_idxs)
+        ins.dt = self.avg_dt
+
+        # initialize insect
+        ins.initialize()
+
         # call parent __init__ method
         super(TrialFromPositionSequence, self).__init__(pl, ins)
 
-        # discretize trajectory positions and get/set average dt
-        self.forced_pos_idxs = self.pl.env.discretize_position_sequence(positions)
-        self.avg_dt = (0.01 * len(positions)) / len(self.forced_pos_idxs)
-        if ins:
-            self.ins.dt = self.avg_dt
-            self.ins.initialize()
-
         # step through all positions and fill in timepoints, etc
-        self.step(forced_pos_idx=self.forced_pos_idxs[0], first_step=True)
+        for _ in self.forced_pos_idxs[1:]:
+            self.step()
 
-        for forced_pos_idx in self.forced_pos_idxs[1:]:
-            self.step(forced_pos_idx=forced_pos_idx)
-
-    def step(self, forced_pos_idx, first_step=False):
+    def step(self, first_step=False):
 
         if not first_step:
             self.ins.calc_util()
 
-        self.ins.move(forced_pos_idx)
+        self.ins.move(self.forced_pos_idxs[self.ts + 1])
 
         # get concentration and odor
         odor = self.pl.conc[tuple(self.ins.pos_idx)]
-        detected_odor = self.pl.sample(self.ins.pos_idx)
-
         # let insect sample odor
-        self.ins.odor = detected_odor
-        # self.ins.sample(detected_odor)
+        self.ins.odor = self.pl.sample(self.ins.pos_idx)
 
         # update source probability
         self.ins.update_src_prob()
