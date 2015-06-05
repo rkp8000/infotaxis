@@ -45,11 +45,8 @@ class Trial(object):
 
         # get concentration and odor
         odor = self.pl.conc[tuple(self.ins.pos_idx)]
-        detected_odor = self.pl.sample(self.ins.pos_idx)
-
         # let insect sample odor
-        self.ins.odor = detected_odor
-        # self.ins.sample(detected_odor)
+        self.ins.odor = self.pl.sample(self.ins.pos_idx)
 
         # update source probability
         self.ins.update_src_prob()
