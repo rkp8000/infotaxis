@@ -234,11 +234,9 @@ class GeomConfigExtensionRealTrajectory(Base):
     avg_dt = Column(Float)
 
     geom_config_id = Column(Integer, ForeignKey('geom_config.id'))
-    trial_id = Column(Integer, ForeignKey('trial.id'))
     real_trajectory_id = Column(String(255))
 
     geom_config = relationship("GeomConfig", backref=backref('geom_config_extension_real_trajectory', uselist=False))
-    trial = relationship("Trial", backref=backref('geom_config_extension_real_trajectory', uselist=False))
 
 
 if __name__ == '__main__':
