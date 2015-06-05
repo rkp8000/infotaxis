@@ -14,7 +14,7 @@ class DatabaseTest(unittest.TestCase):
 
     def test_correct_number_of_geom_configs_added(self):
         gcgs = session.query(models.GeomConfigGroup). \
-            filter(models.GeomConfigGroup.id.like('wind_tunnel_matched_discretized'))
+            filter(models.GeomConfigGroup.id.like('wind_tunnel_matched_discretized%'))
 
         self.assertEqual(len(gcgs), 9)
 
