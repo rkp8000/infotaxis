@@ -40,15 +40,19 @@ def main(traj_limit=None):
 
             for tctr, traj in enumerate(trajs):
 
-
                 positions = traj.get_positions(wt_session)
 
                 discrete_trajectory = ENV.discretize_position_sequence(positions)
                 discrete_duration = len(discrete_trajectory)
                 avg_dt = .01 * len(positions) / discrete_duration
-                geom_config = models.GeomConfig(duration=discrete_duration, avg_dt=avg_dt)
+                geom_config = models.GeomConfig(duration=discrete_duration)
                 geom_config.start_idx = discrete_trajectory[0]
                 geom_config.geom_config_group = geom_config_group
+
+                # add extension containing extra data about this geom_config
+                gcert = models.GeomConfigExtensionRealTrajectory(real_trajectory_id=traj.id,
+                                                                 avg_dt=avg_dt)
+                geom_config.geom_config_extension_real_trajectory = gcert
 
                 if tctr == traj_limit:
                     break
