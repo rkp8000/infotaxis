@@ -133,6 +133,15 @@ class Trial(Base):
     start_timepoint_id = Column(BigInteger)
     end_timepoint_id = Column(BigInteger)
 
+    def get_timepoints(self, session):
+        """Return all timepoints for this trial."""
+
+        timepoints = session.query(Timepoint). \
+            filter(Timepoint.id.between(self.start_timepoint_id, self.end_timepoint_id)). \
+            order_by(Timepoint.id)
+
+        return timepoints
+
 
 class TrialInfo(Base):
     __tablename__ = 'trial_info'
