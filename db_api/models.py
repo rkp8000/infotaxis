@@ -253,7 +253,7 @@ class GeomConfigExtensionRealTrajectory(Base):
     geom_config_id = Column(Integer, ForeignKey('geom_config.id'))
     real_trajectory_id = Column(String(255))
 
-    geom_config = relationship("GeomConfig", backref=backref('geom_config_extension_real_trajectory', uselist=False))
+    geom_config = relationship("GeomConfig", backref=backref('extension_real_trajectory', uselist=False))
 
 
 if __name__ == '__main__':

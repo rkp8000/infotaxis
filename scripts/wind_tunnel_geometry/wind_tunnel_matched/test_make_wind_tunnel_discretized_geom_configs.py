@@ -29,8 +29,8 @@ class DatabaseTestCase(unittest.TestCase):
 
             # make sure all geom_configs have geom_config_extension with all fields filled out
             for gc in gcg.geom_configs:
-                self.assertGreater(gc.geom_config_extension_real_trajectory.avg_dt, 0)
-                self.assertGreater(len(gc.geom_config_extension_real_trajectory.real_trajectory_id), 0)
+                self.assertGreater(gc.extension_real_trajectory.avg_dt, 0)
+                self.assertGreater(len(gc.extension_real_trajectory.real_trajectory_id), 0)
 
 if __name__ == '__main__':
     unittest.main()

@@ -50,9 +50,9 @@ def main(traj_limit=None):
                 geom_config.geom_config_group = geom_config_group
 
                 # add extension containing extra data about this geom_config
-                gcert = models.GeomConfigExtensionRealTrajectory(real_trajectory_id=traj.id,
+                ext = models.GeomConfigExtensionRealTrajectory(real_trajectory_id=traj.id,
                                                                  avg_dt=avg_dt)
-                geom_config.geom_config_extension_real_trajectory = gcert
+                geom_config.extension_real_trajectory = ext
 
                 if tctr == traj_limit:
                     break
