@@ -143,7 +143,7 @@ class TrialFromPositionSequence(Trial):
         """
 
         # discretize trajectory positions and get/set average dt for insect
-        self.forced_pos_idxs = self.pl.env.discretize_position_sequence(positions)
+        self.forced_pos_idxs = pl.env.discretize_position_sequence(positions)
         self.avg_dt = (0.01 * len(positions)) / len(self.forced_pos_idxs)
         ins.dt = self.avg_dt
 
@@ -151,7 +151,7 @@ class TrialFromPositionSequence(Trial):
         ins.initialize()
 
         # call parent __init__ method
-        super(TrialFromPositionSequence, self).__init__(pl, ins)
+        super(TrialFromPositionSequence, self).__init__(pl, ins, nsteps=len(self.forced_pos_idxs))
 
         # step through all positions and fill in timepoints, etc
         for _ in self.forced_pos_idxs[1:]:
