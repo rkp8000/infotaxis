@@ -17,15 +17,16 @@ from trial import TrialFromPositionSequence
 # get configuration
 from config.generate_discretized_wind_tunnel_trajectory_copies import *
 
-# get wind tunnel connection and models
-wt_session = imp.load_source('db_api.connect', os.path.join(WT_REPO, 'db_api', 'connect.py')).session
-wt_models = imp.load_source('db_api.models', os.path.join(WT_REPO, 'db_api', 'models.py'))
-
 
 def main(traj_limit=None):
-    # add script execution to database
+
+    # add script execution to infotaxis database
     add_script_execution(script_id=SCRIPT_ID, session=session, multi_use=False, notes=SCRIPT_NOTES)
     session.commit()
+
+    # get wind tunnel connection and models
+    wt_session = imp.load_source('db_api.connect', os.path.join(WT_REPO, 'db_api', 'connect.py')).session
+    wt_models = imp.load_source('db_api.models', os.path.join(WT_REPO, 'db_api', 'models.py'))
 
     for experiment_id in EXPERIMENT_IDS:
 
