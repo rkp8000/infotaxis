@@ -3,7 +3,6 @@ from __future__ import division
 SCRIPT_ID = 'make_wind_tunnel_discretized_geom_configs'
 SCRIPT_NOTES = 'Make all geom configs for all experiments and odor states.'
 
-import os
 import imp
 
 from db_api.connect import session
@@ -12,15 +11,16 @@ from db_api import models, add_script_execution
 # get configuration
 from config.make_wind_tunnel_discretized_geom_configs import *
 
-# get wind tunnel connection and models
-wt_session = imp.load_source('db_api.connect', os.path.join(WT_REPO, 'db_api', 'connect.py')).session
-wt_models = imp.load_source('db_api.models', os.path.join(WT_REPO, 'db_api', 'models.py'))
-
 
 def main(traj_limit=None):
-    # add script execution to database
+
+    # add script execution to infotaxis database
     add_script_execution(script_id=SCRIPT_ID, notes=SCRIPT_NOTES, session=session)
     session.commit()
+
+    # get wind tunnel connection and models
+    wt_session = imp.load_source('db_api.connect', os.path.join(WT_REPO, 'db_api', 'connect.py')).session
+    wt_models = imp.load_source('db_api.models', os.path.join(WT_REPO, 'db_api', 'models.py'))
 
     for experiment_id in EXPERIMENT_IDS:
 
