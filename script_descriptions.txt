@@ -17,7 +17,9 @@ Generate a set of trajectories inside a theoretical wind tunnel using starting p
 from actual wind tunnel data. Like 'generate_wind_tunnel_matched_trials', but making sure to generate one infotaxis trial for every wind tunnel trial.
 
 ID: make_wind_tunnel_discretized_geom_configs
+TYPE: data_generating
 Use specified environment discretization to calculate the starting position idxs and discretized trial durations and save them in the database.
 
 ID: generate_discretized_wind_tunnel_trajectory_copies_and_geom_configs
+TYPE: data_generating
 Load all wind tunnel trajectories and make discretized copies of them for direct comparison with infotaxis-begotten trajectories. This also requires making a geom_config_group and geom_configs for each trajectory.
