@@ -24,8 +24,8 @@ class ModelTestCase(unittest.TestCase):
 
         session.add(gcert)
 
-        self.assertEqual(gcert, geom_config0.geom_config_extension_real_trajectory)
-        self.assertEqual(geom_config0.geom_config_extension_real_trajectory.real_trajectory_id,
+        self.assertEqual(gcert, geom_config0.extension_real_trajectory)
+        self.assertEqual(geom_config0.extension_real_trajectory.real_trajectory_id,
                          'test_trajectory_id')
 
         # try querying the join table
