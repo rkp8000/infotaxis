@@ -2,8 +2,9 @@ from __future__ import division
 import unittest
 
 import numpy as np
+import matplotlib.pyplot as plt
 
-from plume import BasicPlume, CollimatedPlume, Environment3d
+from plume import BasicPlume, EmptyPlume, Environment3d
 from insect import Insect
 from trial import Trial, TrialFromPositionSequence
 from logprob_odor import binary_advec_diff_tavg
@@ -15,75 +16,57 @@ class TruismsTestCase(unittest.TestCase):
         self.assertTrue(True)
 
 
-class DiscretizationTestCase(unittest.TestCase):
+class TrialFromPositionSequenceTestCase(unittest.TestCase):
 
     def setUp(self):
-        xrbins = np.linspace(0, 1., 11)
-        yrbins = np.linspace(0, 1., 11)
-        zrbins = np.linspace(0, 1., 11)
+        xrbins = np.linspace(-0.3, 1.0, 66)
+        yrbins = np.linspace(-0.15, 0.15, 16)
+        zrbins = np.linspace(-0.15, 0.15, 16)
         self.env = Environment3d(xrbins, yrbins, zrbins)
 
-        self.pl = CollimatedPlume(env=self.env, dt=.01)
-        self.pl.set_params(20, 10, .5, .5, .5, .5)
+        self.pl = EmptyPlume(self.env)
+        self.pl.initialize()
+        self.ins = Insect(env=self.env, dt=.01)
+        self.ins.set_params(w=0.4, r=1000, d=0.12, a=0.002, tau=1000)
+        self.ins.loglike_function = binary_advec_diff_tavg
 
-    def test_straight_line_trajectory_discretization_by_trial_instance(self):
+    def test_source_probability_updating(self):
+        xs = np.linspace(-.1, .7, 100)
+        ys = np.zeros(xs.shape, dtype=float)
+        zs = .06 * np.ones(xs.shape, dtype=float)
+        positions = np.array([xs, ys, zs]).T
 
-        # this trajectory should have 11 timesteps when mapped onto the grid in env
-        x = 0.55 * np.ones((30,))
-        y = np.linspace(.15, .75, 30)
-        z = np.linspace(.45, .05, 30)
-        positions = np.array([x, y, z]).T
+        self.ins.initialize()
+        trial = TrialFromPositionSequence(positions, self.pl, self.ins)
 
-        trial = TrialFromPositionSequence(positions, self.pl)
+        # make sure insect has gone strictly downwind in a straight line
+        self.assertEqual(trial.pos_idx[0, 1], trial.pos_idx[-1, 1])
+        self.assertEqual(trial.pos_idx[0, 2], trial.pos_idx[-1, 2])
+        self.assertLess(trial.pos_idx[0, 0], trial.pos_idx[-1, 0])
 
-        # check to make sure duration is correct
-        self.assertEqual(trial.ts, 10)
+        for pctr, pos_idx in enumerate(trial.pos_idx[:-1]):
 
-    def test_perfectly_diagonal_trajectory_discretization_by_trial_instance(self):
-        x = np.linspace(.15, .75, 40)
-        y = np.linspace(.15, .75, 40)
-        z = np.linspace(.15, .75, 40)
-        positions = np.array([x, y, z]).T
+            # make sure log source probability is -inf at all visited locations
+            self.assertLess(trial.ins.logprob[tuple(pos_idx)], 0)
+            self.assertTrue(np.isinf(trial.ins.logprob[tuple(pos_idx)]))
 
-        trial = TrialFromPositionSequence(positions, self.pl)
+            # make sure entropy is greater than zero for all timepoints
+            self.assertGreater(trial.entropies[pctr], 0)
 
-        # check to make sure duration is correct
-        true_duration = 19
-        self.assertEqual(trial.ts + 1, true_duration)
+            # make sure entropy is lower than previous entropy
+            if pctr >= 1:
+                self.assertLess(trial.entropies[pctr], trial.entropies[pctr - 1])
 
-        # check that each pos idx is one step away from the previous pos idx
-        for pi_ctr in range(trial.ts):
-            this_pos_idx = np.array(trial.pos_idx[pi_ctr])
-            next_pos_idx = np.array(trial.pos_idx[pi_ctr + 1])
-            self.assertEqual(np.abs(this_pos_idx - next_pos_idx).sum(), 1)
+        # make sure source probability is lower upwind than downwind of insect
+        cur_pos_idx = trial.pos_idx[-1]
+        for displacement in range(1, 5):
+            uw_pos_idx = np.array(cur_pos_idx) - np.array([displacement, 1, 0])
+            dw_pos_idx = np.array(cur_pos_idx) + np.array([displacement, 1, 0])
+            self.assertLess(trial.ins.logprob[tuple(uw_pos_idx)],
+                            trial.ins.logprob[tuple(dw_pos_idx)])
 
-    def test_random_walk_trajectory_discretization_by_trial_instance(self):
-
-        # loop over some more random trajectories
-        for _ in range(5):
-
-            x = 0.5 + np.random.normal(0, .003, (1000,)).sum()
-            y = 0.5 + np.random.normal(0, .003, (1000,)).sum()
-            z = 0.5 + np.random.normal(0, .003, (1000,)).sum()
-            positions = np.array([x, y, z]).T
-            # truncate positions if any of them go beyond 1 or 0
-            outside_env = [ts for ts, pos in enumerate(positions) if np.any(pos > 1) or np.any(pos < 0)]
-            if outside_env:
-                positions = positions[:outside_env[0]]
-
-            trial = TrialFromPositionSequence(positions, self.pl)
-
-            # check that each pos idx is one step away from the previous pos idx
-            for pi_ctr in range(trial.ts):
-                this_pos_idx = np.array(trial.pos_idx[pi_ctr])
-                next_pos_idx = np.array(trial.pos_idx[pi_ctr + 1])
-                self.assertEqual(np.abs(this_pos_idx - next_pos_idx).sum(), 1)
-
-            # check that first and last pos idx are what env would give them
-            first_pos_idx_env = np.array(self.env.idx_from_pos[positions[0]])
-            last_pos_idx_env = np.array(self.env.idx_from_pos[positions[-1]])
-            np.testing.assert_array_equal(first_pos_idx_env, np.array(trial.pos_idx[0]))
-            np.testing.assert_array_equal(last_pos_idx_env, np.array(trial.pos_idx[trial.ts]))
+        plt.matshow(trial.ins.logprobxy.T, origin='lower')
+        plt.show(block=True)
 
 
 class MathTestCase(unittest.TestCase):
