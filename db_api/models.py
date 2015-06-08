@@ -115,9 +115,17 @@ class GeomConfig(Base):
     def src_idx(self):
         return self.src_xidx, self.src_yidx, self.src_zidx
 
+    @src_idx.setter
+    def src_idx(self, src_idx):
+        self.src_xidx, self.src_yidx, self.src_zidx = src_idx
+
     @property
     def start_idx(self):
         return self.start_xidx, self.start_yidx, self.start_zidx
+
+    @start_idx.setter
+    def start_idx(self, start_idx):
+        self.start_xidx, self.start_yidx, self.start_zidx = start_idx
 
 
 class Trial(Base):
