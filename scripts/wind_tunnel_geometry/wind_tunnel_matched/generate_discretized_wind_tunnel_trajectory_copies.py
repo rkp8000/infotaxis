@@ -54,6 +54,7 @@ def main(traj_limit=None):
             # make insect
             ins = Insect(env=ENV, dt=DT)
             ins.set_params(**INSECT_PARAMS_DICT[experiment_id])
+            ins.loglike_function = LOGLIKE
             ins.initialize()
             ins.generate_orm(models, sim=sim)
 
