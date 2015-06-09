@@ -9,10 +9,13 @@ import os
 import imp
 import numpy as np
 import matplotlib.pyplot as plt
+plt.ion()
 
 from db_api.connect import session
 from db_api import models
 from plotting import multi_traj as plot_multi_traj
+
+from plume import CollimatedPlume
 
 # get configuration
 from config.view_overlay_empirical_continuous_empirical_discretized import *
@@ -28,13 +31,29 @@ sim = session.query(models.Simulation).get(SIMULATION_ID)
 fig, axs = plt.subplots(2, 1)
 
 for trial in sim.trials:
+    [ax.cla() for ax in axs]
 
+    # get discrete positions from trial
     timepoints_discrete = trial.get_timepoints(session)
+    positions_discrete = [sim.env.pos_from_idx((tp.xidx, tp.yidx, tp.zidx))
+                          for tp in timepoints_discrete]
+    positions_discrete = np.array(positions_discrete)
 
     # get corresponding trajectory from wind tunnel database
     traj_id = trial.geom_config.extension_real_trajectory.real_trajectory_id
     traj = wt_session.query(wt_models.Trajectory)
 
+    # get continuous positions that were discretized
     timepoints_continuous = traj.get_timepoints(wt_session)
+    positions_continuous = [(tp.x, tp.y, tp.z) for tp in timepoints_continuous]
+    positions_continuous = np.array(positions_continuous)
 
-    plot_multi_traj(...)
+    # get plume for background
+    pl = CollimatedPlume(env=sim.env, orm=sim.plume)
+    pl.initialize()
+
+    plot_multi_traj(env=sim.env, bkgd=[pl.concxy, pl.concxz],
+                    trajs=[positions_discrete, positions_continuous])
+
+    plt.draw()
+    raw_input()
