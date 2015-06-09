@@ -11,6 +11,7 @@ from __future__ import division
 SCRIPT_ID = 'generate_discretized_wind_tunnel_trajectory_copies'
 SCRIPT_NOTES = 'Run for all experiments and odor states.'
 
+import os
 import imp
 
 from db_api.connect import session
