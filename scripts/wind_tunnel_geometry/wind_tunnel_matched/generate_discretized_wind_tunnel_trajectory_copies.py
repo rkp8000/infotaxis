@@ -1,3 +1,11 @@
+"""
+Load all trajectories from wind tunnel database and save their discretized versions.
+Note: before running this script, you must run "make_wind_tunnel_discretized_geom_configs".
+This is because this script loops through groups of geometrical configurations, loads their
+corresponding trajectories from the wind tunnel database, and discretizes them.
+
+author: @rkp
+"""
 from __future__ import division
 
 SCRIPT_ID = 'generate_discretized_wind_tunnel_trajectory_copies'
@@ -83,7 +91,7 @@ def main(traj_limit=None):
                 trial.orm.simulation = sim
                 trial.orm.geom_config = geom_config
 
-                if traj_limit and gctr == traj_limit:
+                if traj_limit and (gctr == traj_limit - 1):
                     break
 
                 # update ongoing run
