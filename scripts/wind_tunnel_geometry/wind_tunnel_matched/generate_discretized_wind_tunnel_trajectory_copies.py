@@ -1,11 +1,9 @@
 from __future__ import division
 
-SCRIPT_ID = 'generate_discretized_wind_tunnel_trajectory_copies_and_geom_configs'
+SCRIPT_ID = 'generate_discretized_wind_tunnel_trajectory_copies'
 SCRIPT_NOTES = 'Run for all experiments and odor states.'
 
-import os
 import imp
-import numpy as np
 
 from db_api.connect import session
 from db_api import models, add_script_execution
@@ -48,7 +46,7 @@ def main(traj_limit=None):
             pl = CollimatedPlume(env=ENV, dt=DT)
             pl.set_params(**PLUME_PARAMS_DICT[experiment_id])
             if odor_state in ('none', 'afterodor'):
-                pl.max_conc = 0
+                pl.threshold = -1
             pl.initialize()
             pl.generate_orm(models, sim=sim)
 
@@ -59,13 +57,17 @@ def main(traj_limit=None):
             ins.initialize()
             ins.generate_orm(models, sim=sim)
 
-            # add simulation
+            # add simulation and ongoing run
+            sim.ongoing_run = models.OngoingRun(trials_completed=0)
             session.add(sim)
             session.commit()
 
+            # loop through all geom_configs in group, look up corresponding trajectory,
+            # and discretize it
             for gctr, geom_config in enumerate(geom_config_group.geom_configs):
 
-                traj_id = geom_config.geom_config_extension_real_trajectory.real_trajectory_id
+                # get trajectory id from geom_config and trajectory from wind tunnel database
+                traj_id = geom_config.extension_real_trajectory.real_trajectory_id
                 traj = wt_session.query(wt_models.Trajectory).get(traj_id)
 
                 # get positions from traj
@@ -88,8 +90,13 @@ def main(traj_limit=None):
                 if traj_limit and gctr == traj_limit:
                     break
 
+                # update ongoing run
+                sim.ongoing_run.trials_completed += 1
+                session.add(sim)
+                session.commit()
+
             # update total number of trials
-            sim.total_trials = gctr
+            sim.total_trials = gctr + 1
             session.add(sim)
             session.commit()
 
