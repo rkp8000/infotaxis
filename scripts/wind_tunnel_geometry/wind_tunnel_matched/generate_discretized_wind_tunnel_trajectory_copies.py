@@ -23,8 +23,8 @@ def main(traj_limit=None):
     session.commit()
 
     # get wind tunnel connection and models
-    wt_session = imp.load_source('db_api.connect', os.path.join(WT_REPO, 'db_api', 'connect.py')).session
-    wt_models = imp.load_source('db_api.models', os.path.join(WT_REPO, 'db_api', 'models.py'))
+    wt_session = imp.load_source('connect', os.path.join(WT_REPO, 'db_api', 'connect.py')).session
+    wt_models = imp.load_source('models', os.path.join(WT_REPO, 'db_api', 'models.py'))
 
     for experiment_id in EXPERIMENT_IDS:
 
@@ -75,17 +75,13 @@ def main(traj_limit=None):
 
                 # create discretized version of trajectory
                 trial = TrialFromPositionSequence(positions, pl, ins)
-
                 # add timepoints to trial and generate data model
                 trial.add_timepoints(models, session=session, heading_smoothing=sim.heading_smoothing)
                 trial.generate_orm(models)
 
                 # bind simulation, geom_config
-                trial.orm.sim = sim
+                trial.orm.simulation = sim
                 trial.orm.geom_config = geom_config
-
-                # add trial
-                session.add(trial.orm)
 
                 if traj_limit and gctr == traj_limit:
                     break
