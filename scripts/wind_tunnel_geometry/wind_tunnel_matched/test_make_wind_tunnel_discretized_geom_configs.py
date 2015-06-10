@@ -25,7 +25,7 @@ class DatabaseTestCase(unittest.TestCase):
         self.assertEqual(len(gcgs.all()), 9)
 
         for gcg in gcgs:
-            self.assertEqual(len(gcg.geom_configs), TRAJ_LIMIT + 1)
+            self.assertEqual(len(gcg.geom_configs), TRAJ_LIMIT)
 
             # make sure all geom_configs have geom_config_extension with all fields filled out
             for gc in gcg.geom_configs:
