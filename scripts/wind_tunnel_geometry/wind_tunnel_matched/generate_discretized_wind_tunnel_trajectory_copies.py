@@ -92,13 +92,13 @@ def main(traj_limit=None):
                 trial.orm.simulation = sim
                 trial.orm.geom_config = geom_config
 
-                if traj_limit and (gctr == traj_limit - 1):
-                    break
-
                 # update ongoing run
                 sim.ongoing_run.trials_completed += 1
                 session.add(sim)
                 session.commit()
+
+                if traj_limit and (gctr == traj_limit - 1):
+                    break
 
             # update total number of trials
             sim.total_trials = gctr + 1

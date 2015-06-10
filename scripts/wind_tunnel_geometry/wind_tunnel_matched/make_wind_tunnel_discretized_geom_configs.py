@@ -54,7 +54,7 @@ def main(traj_limit=None):
                                                                  avg_dt=avg_dt)
                 geom_config.extension_real_trajectory = ext
 
-                if tctr == traj_limit:
+                if traj_limit and (tctr == traj_limit - 1):
                     break
 
             session.add(geom_config_group)
