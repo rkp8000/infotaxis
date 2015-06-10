@@ -13,7 +13,7 @@ plt.ion()
 
 from db_api.connect import session
 from db_api import models
-from plotting import multi_traj as plot_multi_traj
+from plotting import multi_traj_3d as plot_multi_traj
 
 from plume import CollimatedPlume
 
@@ -41,7 +41,7 @@ for trial in sim.trials:
 
     # get corresponding trajectory from wind tunnel database
     traj_id = trial.geom_config.extension_real_trajectory.real_trajectory_id
-    traj = wt_session.query(wt_models.Trajectory)
+    traj = wt_session.query(wt_models.Trajectory).get(traj_id)
 
     # get continuous positions that were discretized
     timepoints_continuous = traj.get_timepoints(wt_session)
@@ -52,8 +52,11 @@ for trial in sim.trials:
     pl = CollimatedPlume(env=sim.env, orm=sim.plume)
     pl.initialize()
 
-    plot_multi_traj(env=sim.env, bkgd=[pl.concxy, pl.concxz],
-                    trajs=[positions_discrete, positions_continuous])
+    plot_multi_traj(axs=axs, env=sim.env, bkgd=[pl.concxy, pl.concxz],
+                    trajs=[positions_continuous, positions_discrete])
 
     plt.draw()
+    print(traj_id)
     raw_input()
+
+plt.show(block=True)
