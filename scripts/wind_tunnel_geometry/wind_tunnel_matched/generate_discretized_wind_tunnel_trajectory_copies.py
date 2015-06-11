@@ -55,7 +55,7 @@ def main(traj_limit=None):
             pl = CollimatedPlume(env=ENV, dt=DT)
             pl.set_params(**PLUME_PARAMS_DICT[experiment_id])
             if odor_state in ('none', 'afterodor'):
-                pl.threshold = -1
+                pl.set_params(threshold=-1)
             pl.initialize()
             pl.generate_orm(models, sim=sim)
 
