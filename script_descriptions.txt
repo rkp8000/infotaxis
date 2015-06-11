@@ -23,3 +23,7 @@ Use specified environment discretization to calculate the starting position idxs
 ID: generate_discretized_wind_tunnel_trajectory_copies
 TYPE: data_generating
 Load all wind tunnel trajectories and make discretized copies of them for direct comparison with infotaxis-begotten trajectories. This requires make_wind_tunnel_discretized_geom_configs to be run first so that the correct geom_configs can be bound to discretized trajectories.
+
+ID: fix_collimated_plume_thresholds_of_odor_none_and_afterodor_in_db
+TYPE: data_editing
+Go through all of the plumes corresponding to the none and afterodor simulations and change their threshold values to -1, since these weren't actually stored correctly in the plume class.
