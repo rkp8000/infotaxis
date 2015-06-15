@@ -15,7 +15,7 @@ from db_api import models
 from db_api.connect import session
 from db_api import add_script_execution
 
-from config.generate_trials_one_for_one import *
+from config.generate_wind_tunnel_discretized_matched_trials_one_for_one import *
 
 
 def main(traj_limit=None):
