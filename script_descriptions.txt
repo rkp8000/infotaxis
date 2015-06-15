@@ -28,6 +28,6 @@ ID: fix_collimated_plume_thresholds_of_odor_none_and_afterodor_in_db
 TYPE: data_editing
 Go through all of the plumes corresponding to the none and afterodor simulations and change their threshold values to -1, since these weren't actually stored correctly in the plume class.
 
-ID: generate_wind_tunnel_matched_trials_one_for_one
+ID: generate_wind_tunnel_discretized_matched_trials_one_for_one
 TYPE: data_generating
 Create one trial for each wind tunnel trajectory. Use the geometrical configurations calculated by discretizing trajectories.
