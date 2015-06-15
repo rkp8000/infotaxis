@@ -1,9 +1,11 @@
-"""Generate infotaxis trials in simulated wind tunnel with simulated plume."""
+"""
+Generate one infotaxis trial for every real trial, matching starting location, number of timesteps in trajectory, and plume geometry.
+"""
+from __future__ import print_function, division
 
 SCRIPTID = 'generate_wind_tunnel_matched_trials_one_for_one'
-SCRIPTNOTES = 'Create one trial for each wind tunnel trajectory using 0.4 m/s wind and odor plume on, using geometric configurations from odor plume on case.'
+SCRIPTNOTES = 'Run for all experiments and all odor states.'
 
-import numpy as np
 
 from insect import Insect
 from plume import CollimatedPlume
@@ -15,72 +17,99 @@ from db_api import add_script_execution
 
 from config.generate_trials_one_for_one import *
 
-# add script execution to database
-add_script_execution(SCRIPTID, session=session, multi_use=True, notes=SCRIPTNOTES)
 
-# get geom_config_group
-geom_config_group = session.query(models.GeomConfigGroup).get(GEOMCONFIGGROUPID)
-total_trials = len(geom_config_group.geom_configs)
+def main(traj_limit=None):
+    # add script execution to database
+    add_script_execution(SCRIPTID, session=session, multi_use=False, notes=SCRIPTNOTES)
 
-# create simulation
-sim = models.Simulation(id=SIMULATIONID, description=SIMULATIONDESCRIPTION)
-sim.env, sim.dt = ENV, DT
-sim.total_trials = total_trials
-sim.heading_smoothing = HEADINGSMOOTHING
-sim.geom_config_group = geom_config_group
-session.add(sim)
+    for expt in EXPERIMENTS:
+        for odor_state in ODOR_STATES:
 
-# create plume
-pl = CollimatedPlume(env=ENV, dt=DT)
-pl.set_params(**PLUMEPARAMS)
-pl.generate_orm(models, sim=sim)
-session.add(pl.orm)
+            print('Running simulation for expt "{}" with odor "{}"...'.
+                  format(expt, odor_state))
 
-# create insect
-ins = Insect(env=ENV, dt=DT)
-ins.set_params(**INSECTPARAMS)
-ins.loglike_function = LOGLIKE
-ins.generate_orm(models, sim=sim)
-session.add(ins.orm)
+            # get geom_config_group for this experiment and odor state
+            geom_config_group_id = GEOM_CONFIG_GROUP_ID.format(expt, odor_state)
+            geom_config_group = session.query(models.GeomConfigGroup).get(geom_config_group_id)
 
-# create ongoing run
-ongoing_run = models.OngoingRun(trials_completed=0, simulations=[sim])
-session.add(ongoing_run)
+            # get wind tunnel copy simulation so we can match plume and insect
+            wt_copy_sims = session.query(models.Simulation).\
+                filter(models.Simulation.geom_config_group==geom_config_group).\
+                filter(models.Simulation.id.like(WIND_TUNNEL_DISCRETIZED_SIMULATION_ID_PATTERN))
 
-session.commit()
+            # get plume from corresponding discretized real wind tunnel trajectory
+            pl = CollimatedPlume(env=ENV, dt=-1, orm=wt_copy_sims.first().plume)
 
-# generate trials
-tctr = 0
-for geom_config in geom_config_group.geom_configs:
 
-    # set insect starting position
-    ins.set_pos(geom_config.start_idx, is_idx=True)
+            # create insect
+            # note: we will actually make a new insect for each trial, since the dt's vary;
+            # here we just set dt=-1, since this doesn't get stored in the db anyhow
+            ins = Insect(env=ENV, dt=-1)
+            ins.set_params(**INSECT_PARAMS)
+            ins.generate_orm(models)
 
-    # initialize plume and insect and create trial
-    pl.initialize()
-    ins.initialize()
 
-    trial = Trial(pl=pl, ins=ins, nsteps=geom_config.duration)
+            # create simulation
+            sim_id = SIMULATION_ID.format(INSECT_PARAMS['r'],
+                                          INSECT_PARAMS['d'],
+                                          expt, odor_state)
+            sim_desc = SIMULATION_DESCRIPTION.format(expt, odor_state)
 
-    # run trial, plotting along the way if necessary
-    for step in xrange(geom_config.duration - 1):
-        trial.step()
+            sim = models.Simulation(id=sim_id, description=sim_desc)
+            sim.env = ENV
+            sim.dt = -1
+            sim.total_trials = len(geom_config_group.geom_configs)
+            sim.heading_smoothing = 0
+            sim.geom_config_group = geom_config_group
 
-        if trial.at_src:
-            print 'Found source after {} timesteps.'.format(trial.ts)
-            break
+            sim.plume = pl.orm
+            sim.insect = ins.orm
 
-    # save trial
-    trial.add_timepoints(models, session=session, heading_smoothing=sim.heading_smoothing)
-    trial.generate_orm(models)
-    trial.orm.geom_config = geom_config
-    trial.orm.simulation = sim
-    session.add(trial.orm)
+            session.add(sim)
 
-    # update ongoing_run
-    ongoing_run.trials_completed = tctr + 1
-    session.add(ongoing_run)
 
-    # commit
-    session.commit()
-    tctr += 1
+            # create ongoing run
+            ongoing_run = models.OngoingRun(trials_completed=0, simulations=[sim])
+            session.add(ongoing_run)
+
+            session.commit()
+
+            # generate trials
+            for gctr, geom_config in enumerate(geom_config_group.geom_configs):
+
+                if gctr == traj_limit:
+                    break
+
+                # make new plume and insect with proper dts
+                ins = Insect(env=ENV, dt=geom_config.extension_real_trajectory.avg_dt)
+                ins.set_params(**INSECT_PARAMS)
+                ins.loglike_function = LOGLIKE
+
+                # set insect starting position
+                ins.set_pos(geom_config.start_idx, is_idx=True)
+
+                # initialize plume and insect and create trial
+                pl.initialize()
+                ins.initialize()
+
+                trial = Trial(pl=pl, ins=ins, nsteps=geom_config.duration)
+
+                # run trial
+                for step in xrange(geom_config.duration - 1):
+                    trial.step()
+
+                # save trial
+                trial.add_timepoints(models, session=session, heading_smoothing=sim.heading_smoothing)
+                trial.generate_orm(models)
+                trial.orm.geom_config = geom_config
+                trial.orm.simulation = sim
+                session.add(trial.orm)
+
+                # update ongoing_run
+                ongoing_run.trials_completed = gctr
+                session.add(ongoing_run)
+
+                session.commit()
+
+if __name__ == '__main__':
+    main()
