@@ -27,7 +27,6 @@ ENV = Environment3d(X_BINS, Y_BINS, Z_BINS)
 
 # INSECT PARAMS
 INSECT_PARAMS = {
-                'w': 0.4,  # wind (m/s)
                 'r': 1000,  # source emission rate
                 'd': 0.12,  # diffusivity (m^2/s)
                 'a': .002,  # searcher size (m)

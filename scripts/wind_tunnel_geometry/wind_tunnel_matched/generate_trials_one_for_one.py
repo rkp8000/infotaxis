@@ -23,6 +23,16 @@ def main(traj_limit=None):
     add_script_execution(SCRIPTID, session=session, multi_use=False, notes=SCRIPTNOTES)
 
     for expt in EXPERIMENTS:
+        if '0.3mps' in expt:
+            w = 0.3
+        elif '0.4mps' in expt:
+            w = 0.4
+        elif '0.6mps' in expt:
+            w = 0.6
+
+        insect_params = INSECT_PARAMS.copy()
+        insect_params['w'] = w
+
         for odor_state in ODOR_STATES:
 
             print('Running simulation for expt "{}" with odor "{}"...'.
@@ -45,13 +55,13 @@ def main(traj_limit=None):
             # note: we will actually make a new insect for each trial, since the dt's vary;
             # here we just set dt=-1, since this doesn't get stored in the db anyhow
             ins = Insect(env=ENV, dt=-1)
-            ins.set_params(**INSECT_PARAMS)
+            ins.set_params(**insect_params)
             ins.generate_orm(models)
 
 
             # create simulation
-            sim_id = SIMULATION_ID.format(INSECT_PARAMS['r'],
-                                          INSECT_PARAMS['d'],
+            sim_id = SIMULATION_ID.format(insect_params['r'],
+                                          insect_params['d'],
                                           expt, odor_state)
             sim_desc = SIMULATION_DESCRIPTION.format(expt, odor_state)
 
@@ -82,7 +92,7 @@ def main(traj_limit=None):
 
                 # make new plume and insect with proper dts
                 ins = Insect(env=ENV, dt=geom_config.extension_real_trajectory.avg_dt)
-                ins.set_params(**INSECT_PARAMS)
+                ins.set_params(**insect_params)
                 ins.loglike_function = LOGLIKE
 
                 # set insect starting position
@@ -106,7 +116,7 @@ def main(traj_limit=None):
                 session.add(trial.orm)
 
                 # update ongoing_run
-                ongoing_run.trials_completed = gctr
+                ongoing_run.trials_completed = gctr + 1
                 session.add(ongoing_run)
 
                 session.commit()
