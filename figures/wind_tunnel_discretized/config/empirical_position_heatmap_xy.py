@@ -1,1 +1,1 @@
-SIMULATION_ID = 'wind_tunnel_discretized_matched_r1000_d0.12_{}_odor_{}'
+SIMULATION_ID = 'wind_tunnel_discretized_copies_{}_odor_{}'
