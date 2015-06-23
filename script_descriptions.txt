@@ -31,3 +31,7 @@ Go through all of the plumes corresponding to the none and afterodor simulations
 ID: generate_wind_tunnel_discretized_matched_trials_one_for_one
 TYPE: data_generating
 Create one trial for each wind tunnel trajectory. Use the geometrical configurations calculated by discretizing trajectories.
+
+ID: generate_position_histograms
+TYPE: data_analysis
+Create histograms of position for one or more simulations.
