@@ -274,7 +274,7 @@ class SimulationAnalysisPositionHistogram(Base):
 
     simulation_id = Column(String(255), ForeignKey('simulation.id'))
 
-    simulation = relationship("Simulation", backref=backref('analysis_position_heatmap', uselist=False))
+    simulation = relationship("Simulation", backref=backref('analysis_position_histogram', uselist=False))
 
     _data = None
 

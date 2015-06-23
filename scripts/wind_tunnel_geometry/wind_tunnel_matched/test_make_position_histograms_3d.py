@@ -25,31 +25,31 @@ class MainTestCase(unittest.TestCase):
     def test_correct_simulations_analyzed(self):
         for sim_id in [SIM_ID_0, SIM_ID_1]:
             sim = session.query(models.Simulation).get(sim_id)
-            self.assertEqual(sim.analysis_position_heatmap.simulation, sim)
+            self.assertEqual(sim.analysis_position_histogram.simulation, sim)
 
     def test_histogram_dimensions_correct(self):
         for sim_id in [SIM_ID_0, SIM_ID_1]:
             sim = session.query(models.Simulation).get(sim_id)
-            sim.analysis_position_heatmap.fetch_data(session)
-            heatmap_xy = sim.analysis_position_heatmap.xy
+            sim.analysis_position_histogram.fetch_data(session)
+            heatmap_xy = sim.analysis_position_histogram.xy
             self.assertEqual(heatmap_xy.shape[0], sim.env.nx)
             self.assertEqual(heatmap_xy.shape[1], sim.env.ny)
 
-            heatmap_xz = sim.analysis_position_heatmap.xz
+            heatmap_xz = sim.analysis_position_histogram.xz
             self.assertEqual(heatmap_xz.shape[0], sim.env.nx)
             self.assertEqual(heatmap_xz.shape[1], sim.env.nz)
 
-            heatmap_yz = sim.analysis_position_heatmap.yz
+            heatmap_yz = sim.analysis_position_histogram.yz
             self.assertEqual(heatmap_yz.shape[0], sim.env.ny)
             self.assertEqual(heatmap_yz.shape[1], sim.env.nz)
 
     def test_plot_heatmaps(self):
         for sim_id in [SIM_ID_0, SIM_ID_1]:
             sim = session.query(models.Simulation).get(sim_id)
-            sim.analysis_position_heatmap.fetch_data(session)
-            heatmap_xy = sim.analysis_position_heatmap.xy
-            heatmap_xz = sim.analysis_position_heatmap.xz
-            heatmap_yz = sim.analysis_position_heatmap.yz
+            sim.analysis_position_histogram.fetch_data(session)
+            heatmap_xy = sim.analysis_position_histogram.xy
+            heatmap_xz = sim.analysis_position_histogram.xz
+            heatmap_yz = sim.analysis_position_histogram.yz
 
             fig, axs = plt.subplots(1, 3)
             axs[0].matshow(heatmap_xy.T, origin='lower', extent=sim.env.extentxy)
