@@ -18,6 +18,7 @@ from plotting import multi_traj_3d as plot_multi_traj
 from plume import CollimatedPlume
 
 # get configuration
+from config import *
 from config.view_overlay_empirical_continuous_empirical_discretized import *
 
 
