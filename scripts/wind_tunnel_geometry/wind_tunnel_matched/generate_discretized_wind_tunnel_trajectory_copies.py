@@ -9,7 +9,7 @@ author: @rkp
 from __future__ import division
 
 SCRIPT_ID = 'generate_discretized_wind_tunnel_trajectory_copies'
-SCRIPT_NOTES = 'Run for all experiments and odor states.'
+SCRIPT_NOTES = 'Rerun for all experiments and all odor states. Insects now use tau = 10000 to update their source probabilities.'
 
 import os
 import imp
@@ -28,7 +28,7 @@ from config.generate_discretized_wind_tunnel_trajectory_copies import *
 def main(traj_limit=None):
 
     # add script execution to infotaxis database
-    add_script_execution(script_id=SCRIPT_ID, session=session, multi_use=False, notes=SCRIPT_NOTES)
+    add_script_execution(script_id=SCRIPT_ID, session=session, multi_use=True, notes=SCRIPT_NOTES)
     session.commit()
 
     # get wind tunnel connection and models

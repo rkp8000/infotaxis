@@ -4,7 +4,7 @@ Generate one infotaxis trial for every real trial, matching starting location, n
 from __future__ import print_function, division
 
 SCRIPTID = 'generate_wind_tunnel_discretized_matched_trials_one_for_one'
-SCRIPTNOTES = 'Rerun for all experiments and all odor states. Insects now use tau = 10000 to update their source probabilities.'
+SCRIPTNOTES = 'Run for all experiments and odor states.'
 
 
 from insect import Insect
@@ -20,7 +20,7 @@ from config.generate_wind_tunnel_discretized_matched_trials_one_for_one import *
 
 def main(traj_limit=None):
     # add script execution to database
-    add_script_execution(SCRIPTID, session=session, multi_use=True, notes=SCRIPTNOTES)
+    add_script_execution(SCRIPTID, session=session, multi_use=False, notes=SCRIPTNOTES)
 
     for expt in EXPERIMENTS:
         if '0.3mps' in expt:
