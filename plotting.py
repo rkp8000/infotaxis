@@ -124,15 +124,33 @@ def multi_traj_3d(axs, env, bkgd, trajs, hits=None, colors=None):
 
     if not colors:
         colors = ['k', 'g', 'r', 'b']
-        hit_colors = ['r', 'c']
+    hit_colors = ['r', 'c', 'm', 'y']
 
     for t_ctr, traj in enumerate(trajs):
         axs[0].plot(traj[:, 0], traj[:, 1], c=colors[t_ctr], lw=2)
         axs[1].plot(traj[:, 0], traj[:, 2], c=colors[t_ctr], lw=2)
 
-    for h_ctr, hit in enumerate(hits):
-        traj = trajs[h_ctr]
+    for t_ctr, hit in enumerate(hits):
+        traj = trajs[t_ctr]
         axs[0].scatter(traj[hit > 0, 0], traj[hit > 0, 1], s=50,
-                       c=hit_colors[h_ctr], marker='x', lw=2, zorder=10)
+                       c=hit_colors[t_ctr], marker='x', lw=2, zorder=10)
         axs[1].scatter(traj[hit > 0, 0], traj[hit > 0, 2], s=50,
-                       c=hit_colors[h_ctr], marker='x', lw=2, zorder=10)
+                       c=hit_colors[t_ctr], marker='x', lw=2, zorder=10)
+
+
+def multi_traj_3d_with_entropy(axs, env, bkgd, trajs, entropies, hits=None, colors=None):
+    """Plot multiple trajectories in 3d overlaid on one another. Also plot their entropy
+        time-series."""
+
+    multi_traj_3d(axs, env, bkgd, trajs, hits=hits, colors=colors)
+
+    if not colors:
+        colors = ['k', 'g', 'r', 'b']
+    hit_colors = ['r', 'c', 'm', 'y']
+
+    # plot entropy
+    for t_ctr, entropy in enumerate(entropies):
+        axs[2].plot(entropy, lw=2, color=colors[t_ctr])
+
+    axs[2].set_xlabel('time steps')
+    axs[2].set_ylabel('source position entropy')
