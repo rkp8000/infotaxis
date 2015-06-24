@@ -135,11 +135,12 @@ class Trial(object):
 class TrialFromPositionSequence(Trial):
     """For trials that are constructed by discretizing an empirical trajectory"""
 
-    def __init__(self, positions, pl, ins):
+    def __init__(self, positions, pl, ins, run_all_steps=True):
         """
         :param positions: N x 3 array of positions
         :param pl: plume object used for discretization
         :param ins: insect object used to calculate source position probabilities
+        :param run_all_steps: set to True to build the whole trial
         """
 
         # discretize trajectory positions and get/set average dt for insect
@@ -153,9 +154,10 @@ class TrialFromPositionSequence(Trial):
         # call parent __init__ method
         super(TrialFromPositionSequence, self).__init__(pl, ins, nsteps=len(self.forced_pos_idxs))
 
-        # step through all positions and fill in timepoints, etc
-        for _ in self.forced_pos_idxs[1:]:
-            self.step()
+        if run_all_steps:
+            # step through all positions and fill in timepoints, etc
+            for _ in self.forced_pos_idxs[1:]:
+                self.step()
 
     def step(self, first_step=False):
 
