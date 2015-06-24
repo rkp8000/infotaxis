@@ -34,10 +34,11 @@ for trial_empirical in sim.trials:
     [ax.cla() for ax in axs]
 
     # get positions from empirical trial
-    timepoints_discrete = trial_empirical.get_timepoints(session)
-    positions_discrete = [sim.env.pos_from_idx((tp.xidx, tp.yidx, tp.zidx,))
-                          for tp in timepoints_discrete]
-    positions_discrete_empirical = np.array(positions_discrete)
+    timepoints_empirical = trial_empirical.get_timepoints(session)
+    positions_empirical = [sim.env.pos_from_idx((tp.xidx, tp.yidx, tp.zidx,))
+                           for tp in timepoints_empirical]
+    positions_empirical = np.array(positions_empirical)
+    detected_odors_empirical = np.array([tp.detected_odor for tp in timepoints_empirical])
 
     # find infotaxis trial
     trial_infotaxis = None
@@ -47,17 +48,19 @@ for trial_empirical in sim.trials:
             break
 
     # get positions from infotaxis trial
-    timepoints_discrete = trial_infotaxis.get_timepoints(session)
-    positions_discrete = [sim.env.pos_from_idx((tp.xidx, tp.yidx, tp.zidx,))
-                          for tp in timepoints_discrete]
-    positions_discrete_infotaxis = np.array(positions_discrete)
+    timepoints_infotaxis = trial_infotaxis.get_timepoints(session)
+    positions_infotaxis = [sim.env.pos_from_idx((tp.xidx, tp.yidx, tp.zidx,))
+                           for tp in timepoints_infotaxis]
+    positions_infotaxis = np.array(positions_infotaxis)
+    detected_odors_infotaxis = np.array([tp.detected_odor for tp in timepoints_infotaxis])
 
     # get plume for background
     pl = CollimatedPlume(env=sim.env, orm=sim.plume)
     pl.initialize()
 
     plot_multi_traj(axs=axs, env=sim.env, bkgd=[pl.concxy, pl.concxz, ],
-                    trajs=[positions_discrete_empirical, positions_discrete_infotaxis, ])
+                    trajs=[positions_empirical, positions_infotaxis, ],
+                    hits=[detected_odors_empirical, detected_odors_infotaxis])
 
     plt.draw()
     raw_input()
