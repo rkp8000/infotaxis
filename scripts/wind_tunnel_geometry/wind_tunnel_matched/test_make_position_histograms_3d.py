@@ -1,6 +1,6 @@
 from __future__ import print_function, division
 
-TRAJ_LIMIT = 10
+TRAJ_LIMIT = 5
 SIM_ID_0 = 'wind_tunnel_discretized_matched_r1000_d0.12_fruitfly_0.4mps_checkerboard_floor_odor_on'
 SIM_ID_1 = 'wind_tunnel_discretized_copies_fruitfly_0.3mps_checkerboard_floor_odor_afterodor'
 
