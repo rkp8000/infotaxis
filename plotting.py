@@ -97,10 +97,13 @@ def plume_traj_and_entropy_3d(axs, trial):
     axs[2].set_ylabel('source position entropy')
 
 
-def multi_traj_3d(axs, env, bkgd, trajs, colors=None):
+def multi_traj_3d(axs, env, bkgd, trajs, hits=None, colors=None):
     """Plot multiple trajectories in 3d overlaid on one another."""
 
     [ax.cla() for ax in axs]
+
+    if hits is None:
+        hits = []
 
     # get axis limits and extent from env
     xlim = [env.xbins[0], env.xbins[-1]]
@@ -121,7 +124,15 @@ def multi_traj_3d(axs, env, bkgd, trajs, colors=None):
 
     if not colors:
         colors = ['k', 'g', 'r', 'b']
+        hit_colors = ['r', 'c']
 
-    for tctr, traj in enumerate(trajs):
-        axs[0].plot(traj[:, 0], traj[:, 1], c=colors[tctr], lw=2)
-        axs[1].plot(traj[:, 0], traj[:, 2], c=colors[tctr], lw=2)
+    for t_ctr, traj in enumerate(trajs):
+        axs[0].plot(traj[:, 0], traj[:, 1], c=colors[t_ctr], lw=2)
+        axs[1].plot(traj[:, 0], traj[:, 2], c=colors[t_ctr], lw=2)
+
+    for h_ctr, hit in enumerate(hits):
+        traj = trajs[h_ctr]
+        axs[0].scatter(traj[hit > 0, 0], traj[hit > 0, 1], s=50,
+                       c=hit_colors[h_ctr], marker='x', lw=2, zorder=10)
+        axs[1].scatter(traj[hit > 0, 0], traj[hit > 0, 2], s=50,
+                       c=hit_colors[h_ctr], marker='x', lw=2, zorder=10)
