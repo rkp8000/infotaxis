@@ -48,6 +48,9 @@ for trial_empirical in sim.trials:
             trial_infotaxis = trial
             break
 
+    print('Empirical trial id: {}'.format(trial_empirical.id))
+    print('Infotaxis trial id: {}'.format(trial_infotaxis.id))
+
     # get positions from infotaxis trial
     timepoints_infotaxis = trial_infotaxis.get_timepoints(session)
     positions_infotaxis = [sim.env.pos_from_idx((tp.xidx, tp.yidx, tp.zidx,))
