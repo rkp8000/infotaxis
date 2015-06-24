@@ -1,6 +1,6 @@
 from __future__ import print_function, division
 
-TRAJ_LIMIT = 10
+TRAJ_LIMIT = 5
 
 import unittest
 import make_wind_tunnel_discretized_geom_configs

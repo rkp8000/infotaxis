@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-TRAJ_LIMIT = 10
+TRAJ_LIMIT = 5
 
 import unittest
 import generate_discretized_wind_tunnel_trajectory_copies
