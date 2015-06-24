@@ -135,18 +135,22 @@ class Trial(object):
 class TrialFromPositionSequence(Trial):
     """For trials that are constructed by discretizing an empirical trajectory"""
 
-    def __init__(self, positions, pl, ins, run_all_steps=True):
+    def __init__(self, positions, pl, ins, already_discretized=False, run_all_steps=True):
         """
         :param positions: N x 3 array of positions
         :param pl: plume object used for discretization
         :param ins: insect object used to calculate source position probabilities
+        :param already_discretized: set to True if position sequence has already been discretized
         :param run_all_steps: set to True to build the whole trial
         """
 
         # discretize trajectory positions and get/set average dt for insect
-        self.forced_pos_idxs = pl.env.discretize_position_sequence(positions)
-        self.avg_dt = (0.01 * len(positions)) / len(self.forced_pos_idxs)
-        ins.dt = self.avg_dt
+        if already_discretized:
+            self.forced_pos_idxs = [pl.env.idx_from_pos(pos) for pos in positions]
+        else:
+            self.forced_pos_idxs = pl.env.discretize_position_sequence(positions)
+            self.avg_dt = (0.01 * len(positions)) / len(self.forced_pos_idxs)
+            ins.dt = self.avg_dt
 
         # initialize insect
         ins.initialize()
