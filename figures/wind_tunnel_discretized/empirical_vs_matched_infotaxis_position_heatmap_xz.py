@@ -3,8 +3,10 @@ Plot the position heatmaps projected onto the xy-plane for the discretized empir
 """
 from __future__ import print_function, division
 
-FIG_SIZE = (16, 6)
+FIG_SIZE = (16, 8)
+FONT_SIZE = 20
 
+from scipy import stats
 import matplotlib.pyplot as plt
 
 from db_api import models
@@ -28,8 +30,8 @@ for sim_id_template in (SIMULATION_ID_EMPIRICAL, SIMULATION_ID_INFOTAXIS):
             sim.analysis_position_histogram.fetch_data(session)
             heatmap_xz = sim.analysis_position_histogram.xz
 
-            print(heatmap_xz.sum())
-
+            # calculate entropy
+            entropy = stats.entropy((heatmap_xz / heatmap_xz.sum()).flatten())
             ax = axs[e_ctr, o_ctr]
             ax.matshow(heatmap_xz.T, origin='lower', extent=sim.env.extentxz)
 
@@ -40,11 +42,11 @@ for sim_id_template in (SIMULATION_ID_EMPIRICAL, SIMULATION_ID_INFOTAXIS):
             if o_ctr == 0:
                 ax.set_ylabel('z')
 
-            ax.set_title('{} {}'.format(row_labels[e_ctr], col_labels[o_ctr]))
+            ax.set_title('{} {}\nS = {}'.format(row_labels[e_ctr], col_labels[o_ctr], entropy))
 
     if sim_id_template == SIMULATION_ID_EMPIRICAL:
-        fig.suptitle('empirical')
+        fig.suptitle('empirical\n', fontsize=FONT_SIZE)
     elif sim_id_template == SIMULATION_ID_INFOTAXIS:
-        fig.suptitle('infotaxis')
+        fig.suptitle('infotaxis\n', fontsize=FONT_SIZE)
 
 plt.show(block=True)
