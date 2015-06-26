@@ -13,7 +13,7 @@ from db_api import models
 from db_api.connect import session
 
 from config import *
-from config.empirical_position_heatmap import *
+from config.position_heatmap import *
 
 row_labels = ('0.3 m/s', '0.4 m/s', '0.6 m/s')
 col_labels = ('on', 'none', 'afterodor')
