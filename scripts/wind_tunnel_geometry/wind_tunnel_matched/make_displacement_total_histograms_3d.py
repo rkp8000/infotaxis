@@ -17,7 +17,7 @@ from config.make_displacement_total_histograms_3d import *
 
 def main(traj_limit=None):
     # add script execution to database
-    add_script_execution(SCRIPTID, session=session, multi_use=False, notes=SCRIPTNOTES)
+    add_script_execution(SCRIPTID, session=session, multi_use=True, notes=SCRIPTNOTES)
 
     for sim_id_template in SIMULATION_IDS:
         for expt in EXPERIMENTS:
@@ -40,9 +40,9 @@ def main(traj_limit=None):
                 displacements = np.array(displacements)
 
                 # build the histogram
-                x_bins = np.arange(-sim.env.nx - 1, sim.env.nx - 1) + 0.5
-                y_bins = np.arange(-sim.env.ny - 1, sim.env.ny - 1) + 0.5
-                z_bins = np.arange(-sim.env.nz - 1, sim.env.nz - 1) + 0.5
+                x_bins = np.arange(-sim.env.nx, sim.env.nx) + 0.5
+                y_bins = np.arange(-sim.env.ny, sim.env.ny) + 0.5
+                z_bins = np.arange(-sim.env.nz, sim.env.nz) + 0.5
 
                 displacement_histogram, _ = \
                     np.histogramdd(displacements, bins=(x_bins, y_bins, z_bins))
