@@ -3,7 +3,7 @@ Create 3d histograms of total displacement from the beginning to the end of the 
 """
 
 SCRIPTID = 'make_displacement_total_histograms'
-SCRIPTNOTES = 'Run for all experiments and all odor states for wind tunnel discretized copies and wind tunnel matched infotaxis trajectories.'
+SCRIPTNOTES = 'Off-by-one error fixed. Run for all experiments and all odor states for wind tunnel discretized copies and wind tunnel matched infotaxis trajectories.'
 
 import numpy as np
 
