@@ -38,9 +38,9 @@ def main(traj_limit=None):
                     displacements += (pos_idx_end - pos_idx_start).astype(int)
 
                 # build the histogram
-                x_bins = np.arange(-sim.env.nx, sim.env.nx) + 0.5
-                y_bins = np.arange(-sim.env.ny, sim.env.ny) + 0.5
-                z_bins = np.arange(-sim.env.nz, sim.env.nz) + 0.5
+                x_bins = np.arange(-sim.env.nx - 1, sim.env.nx - 1) + 0.5
+                y_bins = np.arange(-sim.env.ny - 1, sim.env.ny - 1) + 0.5
+                z_bins = np.arange(-sim.env.nz - 1, sim.env.nz - 1) + 0.5
 
                 displacement_histogram, _ = \
                     np.histogramdd(displacements, bins=(x_bins, y_bins, z_bins))
