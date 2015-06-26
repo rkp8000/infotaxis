@@ -39,3 +39,7 @@ Create histograms of position for one or more simulations.
 ID: delete_wind_tunnel_discretized_copies_simulations_because_they_used_wrong_tau
 TYPE: data_removing
 Delete all the simulations and the trials that were made before because they used the wrong tau. These will be replaced by running the script 'generate_discretized_wind_tunnel_trajectory_copies'.
+
+ID: make_displacement_total_histograms
+TYPE: data_analysis
+Create histograms of total displacement from initial starting location for a set of trajectories.
