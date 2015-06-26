@@ -2,7 +2,7 @@
 Create 3d histograms of total displacement from the beginning to the end of the trajectory for the specified simulations, experiments, and odor_states. Save them in the database.
 """
 
-SCRIPTID = 'generate_displacement_total_histograms'
+SCRIPTID = 'make_displacement_total_histograms'
 SCRIPTNOTES = 'Run for all experiments and all odor states for wind tunnel discretized copies and wind tunnel matched infotaxis trajectories.'
 
 import numpy as np
@@ -35,7 +35,9 @@ def main(traj_limit=None):
                     tps = trial.get_timepoints(session).all()
                     pos_idx_start = np.array((tps[0].xidx, tps[0].yidx, tps[0].zidx))
                     pos_idx_end = np.array((tps[-1].xidx, tps[-1].yidx, tps[-1].zidx))
-                    displacements += (pos_idx_end - pos_idx_start).astype(int)
+                    displacements += [(pos_idx_end - pos_idx_start).astype(int)]
+
+                displacements = np.array(displacements)
 
                 # build the histogram
                 x_bins = np.arange(-sim.env.nx - 1, sim.env.nx - 1) + 0.5
@@ -51,7 +53,7 @@ def main(traj_limit=None):
                 displacement_hist_data_model.simulation = sim
 
                 displacement_hist_data_model. \
-                    store_data(session, displacement_hist_data_model.astype(int))
+                    store_data(session, displacement_histogram.astype(int))
                 session.add(displacement_hist_data_model)
 
                 session.commit()

@@ -45,7 +45,7 @@ class MainTestCase(unittest.TestCase):
     def test_plot_heatmaps(self):
         for sim_id in [SIM_ID_0, SIM_ID_1]:
             sim = session.query(models.Simulation).get(sim_id)
-            sim.analysis_position_histogram.fetch_data(session)
+            sim.analysis_displacement_total_histogram.fetch_data(session)
             heatmap_xy = sim.analysis_displacement_total_histogram.xy
             heatmap_xz = sim.analysis_displacement_total_histogram.xz
             heatmap_yz = sim.analysis_displacement_total_histogram.yz
