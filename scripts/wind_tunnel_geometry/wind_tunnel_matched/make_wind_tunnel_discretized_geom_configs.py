@@ -51,7 +51,7 @@ def main(traj_limit=None):
 
                 # add extension containing extra data about this geom_config
                 ext = models.GeomConfigExtensionRealTrajectory(real_trajectory_id=traj.id,
-                                                                 avg_dt=avg_dt)
+                                                               avg_dt=avg_dt)
                 geom_config.extension_real_trajectory = ext
 
                 if traj_limit and (tctr == traj_limit - 1):
