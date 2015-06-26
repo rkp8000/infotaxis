@@ -42,6 +42,18 @@ class MainTestCase(unittest.TestCase):
             self.assertEqual(heatmap_yz.shape[0], 2 * sim.env.ny - 1)
             self.assertEqual(heatmap_yz.shape[1], 2 * sim.env.nz - 1)
 
+    def test_number_of_points_in_histogram_is_number_of_trials(self):
+        for sim_id in [SIM_ID_0, SIM_ID_1]:
+            sim = session.query(models.Simulation).get(sim_id)
+            sim.analysis_displacement_total_histogram.fetch_data(session)
+            n_trials = len(sim.trials)
+            n_points = sim.analysis_displacement_total_histogram.xy.sum()
+            self.assertEqual(n_points, n_trials)
+            n_points = sim.analysis_displacement_total_histogram.xz.sum()
+            self.assertEqual(n_points, n_trials)
+            n_points = sim.analysis_displacement_total_histogram.yz.sum()
+            self.assertEqual(n_points, n_trials)
+
     def test_plot_heatmaps(self):
         for sim_id in [SIM_ID_0, SIM_ID_1]:
             sim = session.query(models.Simulation).get(sim_id)
