@@ -5,7 +5,7 @@ from __future__ import print_function, division
 
 FIG_SIZE = (16, 7)
 FONT_SIZE = 20
-PROJECTION = 'yz'
+PROJECTION = 'xy'
 
 import numpy as np
 from scipy import stats
