@@ -47,3 +47,7 @@ Create histograms of total displacement from initial starting location for a set
 ID: make_displacement_after_n_timesteps_histograms
 TYPE: data_analysis
 Create histograms of displacement from initial starting location to location after a certain number of timesteps have passed for a set of trials.
+
+ID: make_take_off_position_histograms
+TYPE: data_analysis
+Create a 3D histogram of the take-off positions (discretized) of all the insects.
