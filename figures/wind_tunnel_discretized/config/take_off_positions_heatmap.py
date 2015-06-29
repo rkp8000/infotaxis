@@ -1,0 +1,1 @@
+SIMULATION_ID = 'wind_tunnel_discretized_copies_{}_odor_{}'
