@@ -509,5 +509,64 @@ class SimulationAnalysisDisplacementAfterNTimestepsHistogram(Base):
         return self._data.sum(axis=0)
 
 
+class SimulationAnalysisTakeOffPositionHistogram(Base):
+    __tablename__ = 'simulation_analysis_take_off_position_histogram'
+
+    id = Column(Integer, primary_key=True)
+
+    data_array_start = Column(Integer)
+    data_array_end = Column(Integer)
+
+    simulation_id = Column(String(255), ForeignKey('simulation.id'))
+
+    simulation = relationship("Simulation", backref=backref('analysis_take_off_position_histogram', uselist=False))
+
+    _data = None
+
+    def store_data(self, session, data):
+
+        # Add all data points to database in order
+        data_flat = data.flatten()
+        for d_ctr, datum in enumerate(data_flat):
+            data_array_int = DataArrayInt(value=datum)
+            session.add(data_array_int)
+
+            if d_ctr == 0:
+                # calculate start and end ids for the value table
+                session.flush()
+                self.data_array_start = data_array_int.id
+                self.data_array_end = self.data_array_start + len(data_flat) - 1
+
+    def fetch_data(self, session):
+        data_flat = session.query(DataArrayInt.value). \
+            filter(DataArrayInt.id.between(self.data_array_start, self.data_array_end)). \
+            order_by(DataArrayInt.id).all()
+        shape = (self.simulation.env.nx,
+                 self.simulation.env.ny,
+                 self.simulation.env.nz,)
+
+        self._data = np.array(data_flat).reshape(shape)
+
+    @property
+    def xy(self):
+        if self._data is None:
+            raise LookupError('Please run "fetch_data" first!')
+
+        return self._data.sum(axis=2)
+
+    @property
+    def xz(self):
+        if self._data is None:
+            raise LookupError('Please run "fetch_data" first!')
+
+        return self._data.sum(axis=1)
+
+    @property
+    def yz(self):
+        if self._data is None:
+            raise LookupError('Please run "fetch_data" first!')
+
+        return self._data.sum(axis=0)
+
 if __name__ == '__main__':
     Base.metadata.create_all(engine)
