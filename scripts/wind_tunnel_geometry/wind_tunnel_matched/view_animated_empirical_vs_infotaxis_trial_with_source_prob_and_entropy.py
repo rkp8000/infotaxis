@@ -3,7 +3,7 @@ Select a specific empirical trial and its matched infotaxis trial and animate th
 """
 from __future__ import print_function, division
 
-TRIAL_ID_EMPIRICAL = 26
+TRIAL_ID_EMPIRICAL = 99779
 SIMULATION_ID_EMPIRICAL = 'wind_tunnel_discretized_copies_fruitfly_0.4mps_checkerboard_floor_odor_afterodor'
 SIMULATION_ID_INFOTAXIS = 'wind_tunnel_discretized_matched_r1000_d0.12_fruitfly_0.4mps_checkerboard_floor_odor_afterodor'
 
