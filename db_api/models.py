@@ -221,6 +221,44 @@ class Timepoint(Base):
     src_entropy = Column(Float)
 
 
+class SegmentGroup(Base):
+    __tablename__ = 'segment_group'
+
+    id = Column(String(255), primary_key=True)
+
+    heading_smoothing = Column(Integer)
+    threshold = Column(Float)
+
+    simulation_id = Column(String(255), ForeignKey('simulation.id'))
+
+    simulation = relationship("Simulation", backref='segment_groups')
+
+
+class Segment(Base):
+    __tablename__ = 'segment'
+
+    id = Column(Integer, primary_key=True)
+
+    timepoint_id_start = Column(BigInteger)
+    timepoint_id_enter = Column(BigInteger)
+    timepoint_id_exit = Column(BigInteger)
+    timepoint_id_end = Column(BigInteger)
+
+    encounter_number = Column(Integer)
+
+    heading_enter = Column(Float)
+    heading_exit = Column(Float)
+
+    x_idx_enter = Column(Integer)
+    x_idx_exit = Column(Integer)
+
+    trial_id = Column(Integer, ForeignKey('trial.id'))
+    segment_group_id = Column(String(255), ForeignKey('segment_group.id'))
+
+    segment_group = relationship("SegmentGroup", backref='segments')
+    trial = relationship("Trial", backref='segments')
+
+
 class Script(Base):
     __tablename__ = 'script'
 
