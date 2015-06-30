@@ -17,13 +17,8 @@ from plotting import multi_traj_3d_with_entropy as plot_multi_traj
 from plume import CollimatedPlume
 
 # get configuration
-from config import *
 from config.view_overlay_empirical_discretized_infotaxis import *
 
-
-# get wind tunnel connection and models
-wt_session = imp.load_source('connect', os.path.join(WT_REPO, 'db_api', 'connect.py',)).session
-wt_models = imp.load_source('models', os.path.join(WT_REPO, 'db_api', 'models.py',))
 
 # get simulation
 sim = session.query(models.Simulation).get(SIMULATION_ID_EMPIRICAL)
