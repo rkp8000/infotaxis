@@ -55,3 +55,7 @@ Create a 3D histogram of the take-off positions (discretized) of all the insects
 ID: make_segment_groups_and_segments
 TYPE: data_analysis
 Create segment groups according to when the insects cross the plume.
+
+ID: make_exit_triggered_heading_ensembles
+TYPE: data_analysis
+Go through sets of trials and save the mean, std, sem, and number of data points in a heading time-series triggered on exiting the plume.
