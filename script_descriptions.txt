@@ -51,3 +51,7 @@ Create histograms of displacement from initial starting location to location aft
 ID: make_take_off_position_histograms
 TYPE: data_analysis
 Create a 3D histogram of the take-off positions (discretized) of all the insects.
+
+ID: make_segment_groups_and_segments
+TYPE: data_analysis
+Create segment groups according to when the insects cross the plume.
