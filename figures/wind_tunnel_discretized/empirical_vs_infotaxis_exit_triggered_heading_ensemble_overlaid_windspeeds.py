@@ -25,14 +25,17 @@ for s_ctr, sg_id_template in enumerate((SEGMENT_GROUP_ID_EMPIRICAL, SEGMENT_GROU
             heading_ensemble = None
             for ens in seg_group.analysis_triggered_ensembles:
                 # only get the heading ensemble if it has no conditions
-                if ens.variable == 'heading' and ens.trigger_start == 'exit' and not ens.conditions:
+                if ens.variable == 'heading' and ens.trigger_start == 'exit':
                     heading_ensemble = ens
                     break
 
             heading_ensemble.fetch_data(session)
+            if heading_ensemble._data is None:
+                continue
 
-            axs[s_ctr, o_ctr].errorbar(heading_ensemble.time_vector, heading_ensemble.mean,
-                                       yerr=heading_ensemble.std, color=COLORS_EXPT[expt])
+            time_vector = np.arange(len(heading_ensemble.mean))
+            axs[s_ctr, o_ctr].errorbar(time_vector, heading_ensemble.mean,
+                                       yerr=heading_ensemble.sem, color=COLORS_EXPT[expt])
 
 
 plt.show(block=True)
