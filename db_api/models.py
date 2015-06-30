@@ -258,6 +258,30 @@ class Segment(Base):
     segment_group = relationship("SegmentGroup", backref='segments')
     trial = relationship("Trial", backref='segments')
 
+    def fetch_timepoints(self, session, start, end):
+        """
+        Get the timepoints from this segment.
+        """
+
+        tp_id_start_dict = {
+                            'start': self.timepoint_id_start,
+                            'enter': self.timepoint_id_enter,
+                            'exit': self.timepoint_id_exit,
+                            }
+
+        tp_id_end_dict = {
+                          'enter': self.timepoint_id_enter,
+                          'exit': self.timepoint_id_exit,
+                          'end': self.timepoint_id_end,
+                          }
+
+        tp_id_start = tp_id_start_dict[start]
+        tp_id_end = tp_id_end_dict[end]
+
+        tps = session.query(Timepoint).filter(Timepoint.id.between(tp_id_start, tp_id_end))
+
+        return tps
+
 
 class Script(Base):
     __tablename__ = 'script'
@@ -301,6 +325,13 @@ class DataArrayInt(Base):
 
     id = Column(Integer, primary_key=True)
     value = Column(Integer)
+
+
+class DataArrayFloat(Base):
+    __tablename__ = 'data_array_float'
+
+    id = Column(Integer, primary_key=True)
+    value = Column(Float)
 
 
 class SimulationAnalysisPositionHistogram(Base):
@@ -605,6 +636,96 @@ class SimulationAnalysisTakeOffPositionHistogram(Base):
             raise LookupError('Please run "fetch_data" first!')
 
         return self._data.sum(axis=0)
+
+
+class SegmentGroupAnalysisTriggeredEnsemble(Base):
+    __tablename__ = 'segment_group_analysis_triggered_ensemble'
+
+    id = Column(Integer, primary_key=True)
+
+    data_array_start = Column(Integer)
+    data_array_end = Column(Integer)
+
+    variable = Column(String(100))
+    trigger_start = Column(String(100))
+    trigger_end = Column(String(100))
+
+    encounter_number_max = Column(Integer)
+    encounter_number_min = Column(Integer)
+
+    x_idx_max = Column(Integer)
+    x_idx_min = Column(Integer)
+
+    heading_max = Column(Integer)
+    heading_min = Column(Integer)
+
+    segment_group_id = Column(String(255), ForeignKey('segment_group.id'))
+
+    segment_group = relationship("SegmentGroup", backref='analysis_triggered_ensembles')
+
+    _data = None
+
+    def store_data(self, session, mean, std, sem, n_segments):
+
+        data = np.array([mean, std, sem, n_segments], dtype=float)
+
+        # Add all data points to database in order
+        data_flat = data.flatten()
+        for d_ctr, datum in enumerate(data_flat):
+            data_array_float = DataArrayFloat(value=datum)
+            session.add(data_array_float)
+
+            if d_ctr == 0:
+                # calculate start and end ids for the value table
+                session.flush()
+                self.data_array_start = data_array_float.id
+                self.data_array_end = self.data_array_start + len(data_flat) - 1
+
+    def fetch_data(self, session):
+        data_flat = session.query(DataArrayFloat.value). \
+            filter(DataArrayFloat.id.between(self.data_array_start, self.data_array_end)). \
+            order_by(DataArrayFloat.id).all()
+
+        if data_flat:
+            self._data = np.array(data_flat).reshape(4, -1)
+        else:
+            self._data = None
+
+    @property
+    def mean(self):
+        return self._data[0]
+
+    @property
+    def std(self):
+        return self._data[1]
+
+    @property
+    def sem(self):
+        return self._data[2]
+
+    @property
+    def n_segments(self):
+        return self._data[3]
+
+    @property
+    def conditions(self):
+        conditions_dict = {'encounter_number_max': self.encounter_number_max,
+                           'encounter_number_min': self.encounter_number_min,
+                           'x_idx_max': self.x_idx_max,
+                           'x_idx_min': self.x_idx_min,
+                           'heading_max': self.heading_max,
+                           'heading_min': self.heading_min,
+                           }
+        return conditions_dict
+
+    @conditions.setter
+    def conditions(self, conditions):
+        for k, v in conditions.items():
+            if k in self.conditions.keys():
+                self.__dict__[k] = v
+            else:
+                raise KeyError('Key "{}" not recognized!'.format(k))
+
 
 if __name__ == '__main__':
     Base.metadata.create_all(engine)
