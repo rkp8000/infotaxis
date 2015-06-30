@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 
 
 def plume_and_traj_3d(axs, trial, ):
@@ -152,5 +154,52 @@ def multi_traj_3d_with_entropy(axs, env, bkgd, trajs, entropies, hits=None, colo
     for t_ctr, entropy in enumerate(entropies):
         axs[2].plot(entropy, lw=2, color=colors[t_ctr])
 
+    axs[2].set_xlabel('time steps')
+    axs[2].set_ylabel('source position entropy')
+
+
+def traj_3d_with_segments_and_entropy(axs, env, bkgd, traj, seg_starts, seg_ends, entropies, colors=None):
+    """
+    Plot a single trajectory with its segments highlighted and its entropy plotted below.
+    """
+
+    [ax.cla() for ax in axs]
+
+    # get axis limits and extent from env
+    xlim = [env.xbins[0], env.xbins[-1]]
+    ylim = [env.ybins[0], env.ybins[-1]]
+    zlim = [env.zbins[0], env.zbins[-1]]
+
+    extent_xy = xlim + ylim
+    extent_xz = xlim + zlim
+
+    axs[0].matshow(bkgd[0].T, origin='lower', extent=extent_xy, zorder=0, cmap=cm.hot)
+    axs[1].matshow(bkgd[1].T, origin='lower', extent=extent_xz, zorder=0, cmap=cm.hot)
+
+    axs[0].set_xlim(xlim)
+    axs[0].set_ylim(ylim)
+
+    axs[1].set_xlim(xlim)
+    axs[1].set_ylim(zlim)
+
+    # plot trajectory
+    axs[0].plot(traj[:, 0], traj[:, 1], c='w', lw=2, zorder=1)
+    axs[1].plot(traj[:, 0], traj[:, 2], c='w', lw=2, zorder=1)
+
+    # plot entropy
+    t = np.arange(len(entropies))
+    axs[2].plot(t, entropies, c='k', lw=2)
+
+    # plot segments overlaid
+    for seg_start, seg_end in zip(seg_starts, seg_ends):
+        axs[0].plot(traj[seg_start:seg_end, 0],
+                    traj[seg_start:seg_end, 1],
+                    c='c', lw=2, zorder=2)
+        axs[1].plot(traj[seg_start:seg_end, 0],
+                    traj[seg_start:seg_end, 2],
+                    c='c', lw=2, zorder=2)
+        axs[2].plot(t[seg_start:seg_end], entropies[seg_start:seg_end], c='c', lw=2)
+
+    axs[2].set_xlim(0, len(entropies))
     axs[2].set_xlabel('time steps')
     axs[2].set_ylabel('source position entropy')
