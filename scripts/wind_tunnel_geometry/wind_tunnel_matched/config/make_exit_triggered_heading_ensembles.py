@@ -5,7 +5,7 @@ CONDITIONS = {'encounter_number_max': None,
               'encounter_number_min': 3,
               'heading_max': 120,
               'heading_min': 60,
-              'x_idx_max': None,
-              'x_idx_min': None,}
+              'x_idx_max': 50,
+              'x_idx_min': 15,}
 
 TIMESTEP_MAX = 30
