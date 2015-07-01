@@ -1,7 +1,7 @@
 from __future__ import print_function, division
 
 SCRIPT_ID = 'make_exit_triggered_heading_ensembles'
-SCRIPT_NOTES = 'Run for all odor states and experiments with no special conditions.'
+SCRIPT_NOTES = 'Run for all odor states and experiments discarding all upwind (<60 deg) and downwind (> 120 deg) crossings.'
 
 import numpy as np
 from scipy import stats
@@ -22,6 +22,8 @@ def main():
             for odor_state in ODOR_STATES:
                 sg_id = sg_id_template.format(expt, odor_state, 3)
                 segment_group = session.query(models.SegmentGroup).get(sg_id)
+
+                print(sg_id)
 
                 # build filter conditions
                 filter_conditions = []
@@ -71,10 +73,8 @@ def main():
 
                     sem = []
                     for tp in range(TIMESTEP_MAX):
-                        try:
-                            headings_not_nan = headings[~np.isnan(headings[:, tp]), tp]
-                        except:
-                            import pdb; pdb.set_trace()
+                        headings_not_nan = headings[~np.isnan(headings[:, tp]), tp]
+
                         sem += [stats.sem(headings_not_nan)]
 
                     n_segments = (~np.isnan(headings)).sum(axis=0)
