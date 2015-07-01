@@ -3,8 +3,8 @@ SEGMENT_GROUP_IDS = ('empirical_discretized_{}_odor_{}_smoothing{}',
 
 CONDITIONS = {'encounter_number_max': 2,
               'encounter_number_min': 1,
-              'heading_max': 60,
-              'heading_min': 120,
+              'heading_max': 120,
+              'heading_min': 60,
               'x_idx_max': None,
               'x_idx_min': None,}
 
