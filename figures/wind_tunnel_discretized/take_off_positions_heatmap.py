@@ -5,10 +5,9 @@ from __future__ import print_function, division
 
 FIG_SIZE = (16, 7)
 FONT_SIZE = 20
-PROJECTION = 'yz'
+PROJECTION = 'xy'
 
 import numpy as np
-from scipy import stats
 import matplotlib.pyplot as plt
 
 from db_api import models
@@ -47,7 +46,6 @@ for e_ctr, expt in enumerate(EXPERIMENTS):
             ylabel = 'z'
 
         # calculate entropy
-        entropy = stats.entropy((heatmap / heatmap.sum()).flatten())
         ax = axs[e_ctr, o_ctr]
         ax.matshow(np.log(heatmap).T, origin='lower', extent=extent)
 
@@ -58,6 +56,6 @@ for e_ctr, expt in enumerate(EXPERIMENTS):
         if o_ctr == 0:
             ax.set_ylabel(ylabel)
 
-        ax.set_title('{} {}\nS = {}'.format(row_labels[e_ctr], col_labels[o_ctr], entropy))
+        ax.set_title('{} {}'.format(row_labels[e_ctr], col_labels[o_ctr]))
 
 plt.show(block=True)
