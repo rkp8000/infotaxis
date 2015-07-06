@@ -3,7 +3,7 @@ from __future__ import division, print_function
 PROJECTION = 'xy'
 FIG_SIZE = (16, 7)
 FONT_SIZE = 20
-N_TIMESTEPS = 5  # 1, 2, 5, 10, 20, or 50
+N_TIMESTEPS = 1  # 1, 2, 5, 10, 20, or 50
 
 import numpy as np
 from scipy import stats
@@ -64,7 +64,7 @@ for sim_id_template in (SIMULATION_ID_EMPIRICAL, SIMULATION_ID_INFOTAXIS):
             if o_ctr == 0:
                 ax.set_ylabel(ylabel)
 
-            ax.set_title('{} {}\nS = {}'.format(row_labels[e_ctr], col_labels[o_ctr], entropy))
+            ax.set_title('{} {}\nS = {}\n'.format(row_labels[e_ctr], col_labels[o_ctr], entropy))
 
     if sim_id_template == SIMULATION_ID_EMPIRICAL:
         fig.suptitle('empirical\n', fontsize=FONT_SIZE)

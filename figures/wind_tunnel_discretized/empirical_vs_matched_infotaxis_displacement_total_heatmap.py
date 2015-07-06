@@ -33,17 +33,17 @@ for sim_id_template in (SIMULATION_ID_EMPIRICAL, SIMULATION_ID_INFOTAXIS):
 
             if PROJECTION == 'xy':
                 heatmap = sim.analysis_displacement_total_histogram.xy
-                extent = sim.env.extentxy
+                extent = sim.analysis_displacement_total_histogram.extent_xy
                 xlabel = 'x'
                 ylabel = 'y'
             elif PROJECTION == 'xz':
                 heatmap = sim.analysis_displacement_total_histogram.xz
-                extent = sim.env.extentxz
+                extent = sim.analysis_displacement_total_histogram.extent_xz
                 xlabel = 'x'
                 ylabel = 'z'
             elif PROJECTION == 'yz':
                 heatmap = sim.analysis_displacement_total_histogram.yz
-                extent = sim.env.extentyz
+                extent = sim.analysis_displacement_total_histogram.extent_yz
                 xlabel = 'y'
                 ylabel = 'z'
 
@@ -59,7 +59,7 @@ for sim_id_template in (SIMULATION_ID_EMPIRICAL, SIMULATION_ID_INFOTAXIS):
             if o_ctr == 0:
                 ax.set_ylabel(ylabel)
 
-            ax.set_title('{} {}\nS = {}'.format(row_labels[e_ctr], col_labels[o_ctr], entropy))
+            ax.set_title('{} {}\nS = {}\n'.format(row_labels[e_ctr], col_labels[o_ctr], entropy))
 
     if sim_id_template == SIMULATION_ID_EMPIRICAL:
         fig.suptitle('empirical\n', fontsize=FONT_SIZE)
