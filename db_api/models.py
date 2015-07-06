@@ -531,27 +531,47 @@ class SimulationAnalysisDisplacementAfterNTimestepsHistogram(Base):
 
     @property
     def extent_xy(self):
-        x_max = self.simulation.env.x[self.n_timesteps] - self.simulation.env.x[0]
+        try:
+            x_max = self.simulation.env.x[self.n_timesteps] - self.simulation.env.x[0]
+        except IndexError:
+            x_max = self.simulation.env.x[-1] - self.simulation.env.x[0]
         x_min = -x_max
-        y_max = self.simulation.env.y[self.n_timesteps] - self.simulation.env.y[0]
+        try:
+            y_max = self.simulation.env.y[self.n_timesteps] - self.simulation.env.y[0]
+        except IndexError:
+            y_max = self.simulation.env.y[-1] - self.simulation.env.y[0]
+
         y_min = -y_max
 
         return [x_min, x_max, y_min, y_max]
 
     @property
     def extent_xz(self):
-        x_max = self.simulation.env.x[self.n_timesteps] - self.simulation.env.x[0]
+        try:
+            x_max = self.simulation.env.x[self.n_timesteps] - self.simulation.env.x[0]
+        except IndexError:
+            x_max = self.simulation.env.x[-1] - self.simulation.env.x[0]
         x_min = -x_max
-        z_max = self.simulation.env.z[self.n_timesteps] - self.simulation.env.z[0]
+        try:
+            z_max = self.simulation.env.z[self.n_timesteps] - self.simulation.env.z[0]
+        except IndexError:
+            z_max = self.simulation.env.z[-1] - self.simulation.env.z[0]
+
         z_min = -z_max
 
         return [x_min, x_max, z_min, z_max]
 
     @property
     def extent_yz(self):
-        y_max = self.simulation.env.y[self.n_timesteps] - self.simulation.env.y[0]
+        try:
+            y_max = self.simulation.env.y[self.n_timesteps] - self.simulation.env.y[0]
+        except IndexError:
+            y_max = self.simulation.env.y[-1] - self.simulation.env.y[0]
         y_min = -y_max
-        z_max = self.simulation.env.z[self.n_timesteps] - self.simulation.env.z[0]
+        try:
+            z_max = self.simulation.env.z[self.n_timesteps] - self.simulation.env.z[0]
+        except IndexError:
+            z_max = self.simulation.env.z[-1] - self.simulation.env.z[0]
         z_min = -z_max
 
         return [y_min, y_max, z_min, z_max]
