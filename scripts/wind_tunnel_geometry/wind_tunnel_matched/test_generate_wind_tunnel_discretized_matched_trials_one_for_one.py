@@ -18,14 +18,13 @@ class TruismsTestCase(unittest.TestCase):
 class MainTestCase(unittest.TestCase):
 
     def setUp(self):
-        try:
-            generate_wind_tunnel_discretized_matched_trials_one_for_one.main(TRAJ_LIMIT)
-        except Exception, e:
-            pass
+        d = generate_wind_tunnel_discretized_matched_trials_one_for_one.INSECT_PARAMS['d']
+        r = generate_wind_tunnel_discretized_matched_trials_one_for_one.INSECT_PARAMS['r']
+        self.sim_id_pattern = 'wind_tunnel_discretized_matched_r{}_d{}_%'.format(r, d)
 
     def test_correct_number_of_simulations_trials_and_timepoints(self):
         sims = session.query(models.Simulation).\
-            filter(models.Simulation.id.like('%wind_tunnel_discretized_matched%')).all()
+            filter(models.Simulation.id.like(self.sim_id_pattern)).all()
 
         self.assertEqual(len(sims), 9)
 
@@ -38,7 +37,7 @@ class MainTestCase(unittest.TestCase):
 
     def test_windspeeds_are_correct(self):
         sims = session.query(models.Simulation).\
-            filter(models.Simulation.id.like('%wind_tunnel_discretized_matched%')).all()
+            filter(models.Simulation.id.like(self.sim_id_pattern)).all()
 
         for sim in sims:
             insect_params = {ip.name: ip.value for ip in sim.insect.insect_params}
@@ -52,7 +51,7 @@ class MainTestCase(unittest.TestCase):
 
     def test_starting_position_idxs_are_correct(self):
         sims = session.query(models.Simulation).\
-            filter(models.Simulation.id.like('%wind_tunnel_discretized_matched%')).all()
+            filter(models.Simulation.id.like(self.sim_id_pattern)).all()
 
         for sim in sims:
             for trial in sim.trials:
@@ -62,4 +61,9 @@ class MainTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    try:
+        generate_wind_tunnel_discretized_matched_trials_one_for_one.main(TRAJ_LIMIT)
+    except Exception, e:
+        print(e)
+
     unittest.main()
