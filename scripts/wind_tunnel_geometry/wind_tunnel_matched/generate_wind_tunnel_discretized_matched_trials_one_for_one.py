@@ -20,7 +20,7 @@ from config.generate_wind_tunnel_discretized_matched_trials_one_for_one import *
 
 def main(traj_limit=None):
     # add script execution to database
-    add_script_execution(SCRIPTID, session=session, multi_use=False, notes=SCRIPTNOTES)
+    add_script_execution(SCRIPTID, session=session, multi_use=True, notes=SCRIPTNOTES)
 
     for expt in EXPERIMENTS:
         if '0.3mps' in expt:
