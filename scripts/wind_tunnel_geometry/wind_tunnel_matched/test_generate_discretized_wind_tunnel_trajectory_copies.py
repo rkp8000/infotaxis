@@ -12,14 +12,14 @@ from db_api import models
 class MainTestCase(unittest.TestCase):
 
     def setUp(self):
-        try:
-            generate_discretized_wind_tunnel_trajectory_copies.main(TRAJ_LIMIT)
-        except Exception, e:
-            print(e)
+        k0 = generate_discretized_wind_tunnel_trajectory_copies.INSECT_PARAMS_DICT.keys()[0]
+        r = generate_discretized_wind_tunnel_trajectory_copies.INSECT_PARAMS_DICT[k0]['r']
+        d = generate_discretized_wind_tunnel_trajectory_copies.INSECT_PARAMS_DICT[k0]['d']
+        self.sim_id_pattern = 'wind_tunnel_discretized_copies_r{}_d{}_%'.format(r, d)
 
     def test_correct_number_of_simulations_trials_and_timepoints(self):
         sims = session.query(models.Simulation). \
-            filter(models.Simulation.id.like('wind_tunnel_discretized_copies%'))
+            filter(models.Simulation.id.like(self.sim_id_pattern))
 
         self.assertEqual(len(sims.all()), 9)
 
@@ -37,4 +37,5 @@ class MainTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    generate_discretized_wind_tunnel_trajectory_copies.main(TRAJ_LIMIT)
     unittest.main()
