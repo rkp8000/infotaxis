@@ -9,7 +9,7 @@ author: @rkp
 from __future__ import division
 
 SCRIPT_ID = 'generate_discretized_wind_tunnel_trajectory_copies'
-SCRIPT_NOTES = 'Rerun for all experiments and all odor states. Insects now use tau = 10000 to update their source probabilities.'
+SCRIPT_NOTES = 'Run for all experiments and all odor states. Insects now use d = 0.02 m^2/s diffusivity.'
 
 import os
 import imp
@@ -44,7 +44,9 @@ def main(traj_limit=None):
             geom_config_group = session.query(models.GeomConfigGroup).get(geom_config_group_id)
 
             # make simulation
-            sim_id = SIMULATION_ID.format(experiment_id, odor_state)
+            r = INSECT_PARAMS_DICT[experiment_id]['r']
+            d = INSECT_PARAMS_DICT[experiment_id]['d']
+            sim_id = SIMULATION_ID.format(r, d, experiment_id, odor_state)
             sim_description = SIMULATION_DESCRIPTION.format(experiment_id, odor_state)
             sim = models.Simulation(id=sim_id, description=sim_description)
             sim.env, sim.dt = ENV, DT

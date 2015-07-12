@@ -17,7 +17,7 @@ ODOR_STATES = ('on', 'none', 'afterodor')
 GEOM_CONFIG_GROUP_ID = 'wind_tunnel_matched_discretized'
 
 # SIMULATION
-SIMULATION_ID = 'wind_tunnel_discretized_copies_{}_odor_{}'
+SIMULATION_ID = 'wind_tunnel_discretized_copies_r{}_d{}_{}_odor_{}'
 SIMULATION_DESCRIPTION = 'Load all wind tunnel trajectories and make discretized copies of them for direct comparison with infotaxis-generated trajectories. In addition to simply calculating the discretized sequence of position idxs, we assume that despite being forced to move along a certain trajectory, the insect is updating a belief distribution over source positions using what it knows about turbulent statistics. Specifically, it assumes a basic advection-diffusion time-averaged plume, as in Vergassolla 2007, and it calculates expected hit rate using a dt determined by dividing the total trajectory time by the number of steps it takes. The dt for each trajectory is given in the geom_config.geom_config_extension_real_trajectory object. This simulation corresponds to experiment {} with the odor state: {}.'
 
 # ENVIRONMENT
@@ -60,21 +60,21 @@ INSECT_PARAMS_DICT = {
     'fruitfly_0.3mps_checkerboard_floor': {
         'w': 0.3,  # wind (m/s)
         'r': 1000,  # source emission rate
-        'd': 0.12,  # diffusivity (m^2/s)
+        'd': 0.02,  # diffusivity (m^2/s)
         'a': .002,  # searcher size (m)
         'tau': 10000,  # particle lifetime (s)
     },
     'fruitfly_0.4mps_checkerboard_floor': {
         'w': 0.4,  # wind (m/s)
         'r': 1000,  # source emission rate
-        'd': 0.12,  # diffusivity (m^2/s)
+        'd': 0.02,  # diffusivity (m^2/s)
         'a': .002,  # searcher size (m)
         'tau': 10000,  # particle lifetime (s)
     },
     'fruitfly_0.6mps_checkerboard_floor': {
         'w': 0.6,  # wind (m/s)
         'r': 1000,  # source emission rate
-        'd': 0.12,  # diffusivity (m^2/s)
+        'd': 0.02,  # diffusivity (m^2/s)
         'a': .002,  # searcher size (m)
         'tau': 10000,  # particle lifetime (s)
     }
