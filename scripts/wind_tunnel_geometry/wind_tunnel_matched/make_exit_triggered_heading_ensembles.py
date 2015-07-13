@@ -2,7 +2,7 @@ from __future__ import print_function, division
 
 SCRIPT_ID = 'make_exit_triggered_heading_ensembles'
 SCRIPT_NOTES = 'Run for all odor states and experiments with r=1000 and d=0.02, keeping only ' \
-               'crosswind segments.'
+               'downwind segments.'
 import numpy as np
 from scipy import stats
 
