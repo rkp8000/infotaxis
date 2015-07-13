@@ -4,7 +4,7 @@ Generate one infotaxis trial for every real trial, matching starting location, n
 from __future__ import print_function, division
 
 SCRIPTID = 'generate_wind_tunnel_discretized_matched_trials_one_for_one'
-SCRIPTNOTES = 'Run for all experiments and odor states.'
+SCRIPTNOTES = 'Run for all experiments and odor states with d now = 0.08 m^2/s.'
 
 
 from insect import Insect
