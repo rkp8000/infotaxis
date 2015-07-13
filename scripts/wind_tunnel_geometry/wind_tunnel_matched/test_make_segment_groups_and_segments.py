@@ -1,7 +1,7 @@
 from __future__ import print_function, division
 
-SIMULATION_ID_EMPIRICAL = 'wind_tunnel_discretized_copies'
-SIMULATION_ID_INFOTAXIS = 'wind_tunnel_discretized_matched_r1000_d0.12'
+SIMULATION_ID_EMPIRICAL = 'wind_tunnel_discretized_copies_r1000_d0.02'
+SIMULATION_ID_INFOTAXIS = 'wind_tunnel_discretized_matched_r1000_d0.02'
 
 import unittest
 
