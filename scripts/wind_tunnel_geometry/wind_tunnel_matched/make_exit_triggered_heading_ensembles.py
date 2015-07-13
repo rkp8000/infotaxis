@@ -1,8 +1,8 @@
 from __future__ import print_function, division
 
 SCRIPT_ID = 'make_exit_triggered_heading_ensembles'
-SCRIPT_NOTES = 'Run for all odor states and experiments with r=1000 and d=0.02, keeping all segments.'  #keeping only crosswind crossings (heading between 60 and 120 degs), and only keeping noninitial encounters. Also throw out everything in upwind or downwind 30 cm of wind tunnel.'
-
+SCRIPT_NOTES = 'Run for all odor states and experiments with r=1000 and d=0.02, keeping only ' \
+               'crosswind segments.'
 import numpy as np
 from scipy import stats
 
