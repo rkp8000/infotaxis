@@ -1,8 +1,8 @@
 from __future__ import print_function, division
 
 SCRIPT_ID = 'make_exit_triggered_heading_ensembles'
-SCRIPT_NOTES = 'Run for all odor states and experiments with r=1000 and d=0.08, keeping all ' \
-               'crossings.'
+SCRIPT_NOTES = 'Run for all odor states and experiments with r=1000 and d=0.08, keeping only ' \
+               'upwind crossings.'
 import numpy as np
 from scipy import stats
 
