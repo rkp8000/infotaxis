@@ -1,7 +1,8 @@
 from __future__ import division, print_function
 
 SCRIPT_ID = 'make_segment_groups_and_segments'
-SCRIPT_NOTES = 'run for all experiments and odor states calculated where r=1000 and d=0.02, for infotaxis and empirical using a heading smoothing of 3 and threshold of 10'
+SCRIPT_NOTES = 'run for all experiments and odor states calculated where r=1000 and d=0.08, ' \
+               'for infotaxis and empirical using a heading smoothing of 3 and threshold of 10'
 
 import numpy as np
 from scipy.ndimage import gaussian_filter1d as smooth
