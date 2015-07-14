@@ -2,7 +2,9 @@ from __future__ import print_function, division
 
 SCRIPT_ID = 'make_exit_triggered_heading_ensembles'
 SCRIPT_NOTES = 'Run for all odor states and experiments with r=1000 and d=0.08, keeping only ' \
-               'early (1st or 2nd) crosswind crossings, excluding crossings in upwind or downwind parts of wind tunnel.'
+               'late (3rd or later) crosswind crossings, excluding crossings in upwind or ' \
+               'downwind ' \
+               'parts of wind tunnel.'
 import numpy as np
 from scipy import stats
 
