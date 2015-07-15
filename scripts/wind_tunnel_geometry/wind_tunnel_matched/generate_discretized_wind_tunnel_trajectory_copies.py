@@ -9,7 +9,7 @@ author: @rkp
 from __future__ import division
 
 SCRIPT_ID = 'generate_discretized_wind_tunnel_trajectory_copies'
-SCRIPT_NOTES = 'Run for all experiments and all odor states. Insects now use d = 0.08 m^2/s ' \
+SCRIPT_NOTES = 'Run for all experiments and all odor states. Insects now use d = 0.06 m^2/s ' \
                'diffusivity.'
 
 import os

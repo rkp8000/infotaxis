@@ -60,21 +60,21 @@ INSECT_PARAMS_DICT = {
     'fruitfly_0.3mps_checkerboard_floor': {
         'w': 0.3,  # wind (m/s)
         'r': 1000,  # source emission rate
-        'd': 0.08,  # diffusivity (m^2/s)
+        'd': 0.06,  # diffusivity (m^2/s)
         'a': .002,  # searcher size (m)
         'tau': 10000,  # particle lifetime (s)
     },
     'fruitfly_0.4mps_checkerboard_floor': {
         'w': 0.4,  # wind (m/s)
         'r': 1000,  # source emission rate
-        'd': 0.08,  # diffusivity (m^2/s)
+        'd': 0.06,  # diffusivity (m^2/s)
         'a': .002,  # searcher size (m)
         'tau': 10000,  # particle lifetime (s)
     },
     'fruitfly_0.6mps_checkerboard_floor': {
         'w': 0.6,  # wind (m/s)
         'r': 1000,  # source emission rate
-        'd': 0.08,  # diffusivity (m^2/s)
+        'd': 0.06,  # diffusivity (m^2/s)
         'a': .002,  # searcher size (m)
         'tau': 10000,  # particle lifetime (s)
     }
