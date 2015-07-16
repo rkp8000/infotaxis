@@ -39,7 +39,9 @@ for s_ctr, sg_id_template in enumerate((SEGMENT_GROUP_ID_EMPIRICAL, SEGMENT_GROU
                 conditions = (ens.variable == 'heading',
                               ens.trigger_start == 'exit',
                               59 < ens.heading_min < 61,
-                              119 < ens.heading_max < 121)
+                              119 < ens.heading_max < 121,
+                              ens.encounter_number_min is None,
+                              ens.encounter_number_max is None)
 
                 if all(conditions):
                     heading_ensemble = ens
