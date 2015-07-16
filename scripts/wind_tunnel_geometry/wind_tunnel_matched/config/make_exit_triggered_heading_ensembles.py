@@ -1,7 +1,7 @@
 SEGMENT_GROUP_IDS = ('empirical_discretized_r1000_d0.06_{}_odor_{}_smoothing{}',
                      'infotaxis_wind_tunnel_r1000_d0.06_{}_odor_{}_smoothing{}',)
 
-CONDITIONS = {'encounter_number_max': 4,
+CONDITIONS = {'encounter_number_max': 3,
               'encounter_number_min': 3,
               'heading_max': 120,
               'heading_min': 60,
