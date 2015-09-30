@@ -5,9 +5,9 @@ This repository contains code for generating infotactic trajectories according t
 
 ### How to use this code.
 
-1. make new database
+1. make new databases infotaxis_db and test_infotaxis_db
 2. run models.py; this creates all the empty database tables
-3. run update_script_descriptioons.py. This writes all the script descriptions to the database; if you add a new description at some point (corresponding to making a new script), then you'll have to rerun this file
+3. run update_script_descriptions.py. This writes all the script descriptions to the database; if you add a new description at some point (corresponding to making a new script), then you'll have to rerun this file
 4. to redo all the simulations run the following scripts
     * make_wind_tunnel_discretized_geom_configs.py: this creates and stores the geometrical configurations for the wind tunnel trajectories, as well as their "extensions", which contain some meta info
     * open generate_discretized_wind_tunnel_trajectory_copies.py, set the desired parameters in the configuration file (such as diffusivity), make sure to update the script notes to account for this, and run it; this will make discretized copies of all the wind tunnel trajectories and store them in the database; the plume parameters estimated by the insect are important because they determine how it would theoretically update its distribution over possible plume source locations
