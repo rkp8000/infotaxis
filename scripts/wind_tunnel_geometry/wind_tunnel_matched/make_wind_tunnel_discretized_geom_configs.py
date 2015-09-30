@@ -33,14 +33,14 @@ def main(traj_limit=None):
                                                        description=geom_config_group_desc)
 
             # get all wind tunnel trajectories of interest
-            trajs = wt_session.query(wt_models.Trajectory). \
-                filter(wt_models.Trajectory.experiment_id==experiment_id). \
-                filter(wt_models.Trajectory.odor_state==odor_state). \
-                filter(wt_models.Trajectory.clean==True)
+            trajs = wt_session.query(wt_models.Trajectory).\
+                filter(wt_models.Trajectory.experiment_id == experiment_id).\
+                filter(wt_models.Trajectory.odor_state == odor_state).\
+                filter(wt_models.Trajectory.clean is True)
 
             for tctr, traj in enumerate(trajs):
 
-                positions = traj.get_positions(wt_session)
+                positions = traj.positions(wt_session)
 
                 discrete_trajectory = ENV.discretize_position_sequence(positions)
                 discrete_duration = len(discrete_trajectory)

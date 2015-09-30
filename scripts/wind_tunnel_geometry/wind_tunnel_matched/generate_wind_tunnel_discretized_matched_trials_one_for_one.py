@@ -44,7 +44,7 @@ def main(traj_limit=None):
 
             # get wind tunnel copy simulation so we can match plume and insect
             wt_copy_sims = session.query(models.Simulation).\
-                filter(models.Simulation.geom_config_group==geom_config_group).\
+                filter(models.Simulation.geom_config_group == geom_config_group).\
                 filter(models.Simulation.id.like(WIND_TUNNEL_DISCRETIZED_SIMULATION_ID_PATTERN))
 
             # get plume from corresponding discretized real wind tunnel trajectory

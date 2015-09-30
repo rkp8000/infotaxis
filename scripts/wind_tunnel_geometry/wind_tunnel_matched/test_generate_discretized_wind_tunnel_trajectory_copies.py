@@ -21,7 +21,7 @@ class MainTestCase(unittest.TestCase):
         sims = session.query(models.Simulation). \
             filter(models.Simulation.id.like(self.sim_id_pattern))
 
-        self.assertEqual(len(sims.all()), 9)
+        self.assertEqual(len(sims.all()), 12)
 
         for sim in sims:
 

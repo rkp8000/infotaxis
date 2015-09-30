@@ -22,7 +22,7 @@ class DatabaseTestCase(unittest.TestCase):
         gcgs = session.query(models.GeomConfigGroup). \
             filter(models.GeomConfigGroup.id.like('wind_tunnel_matched_discretized%'))
 
-        self.assertEqual(len(gcgs.all()), 9)
+        self.assertEqual(len(gcgs.all()), 12)
 
         for gcg in gcgs:
             self.assertEqual(len(gcg.geom_configs), TRAJ_LIMIT)

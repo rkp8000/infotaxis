@@ -18,7 +18,7 @@ import imp
 from db_api.connect import session
 from db_api import models, add_script_execution
 
-from plume import CollimatedPlume
+from plume import CollimatedPlume, SpreadingGaussianPlume
 from insect import Insect
 from trial import TrialFromPositionSequence
 
@@ -55,7 +55,10 @@ def main(traj_limit=None):
             sim.geom_config_group = geom_config_group
 
             # make plume
-            pl = CollimatedPlume(env=ENV, dt=DT)
+            if 'fruitfly' in experiment_id:
+                pl = CollimatedPlume(env=ENV, dt=DT)
+            elif 'mosquito' in experiment_id:
+                pl = SpreadingGaussianPlume(env=ENV, dt=DT)
             pl.set_params(**PLUME_PARAMS_DICT[experiment_id])
             if odor_state in ('none', 'afterodor'):
                 pl.set_params(threshold=-1)

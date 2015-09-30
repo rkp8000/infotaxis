@@ -78,7 +78,10 @@ def main():
                 sg_id = sg_id_template.format(expt, odor_state, HEADING_SMOOTHING)
                 segment_group = models.SegmentGroup(id=sg_id)
                 segment_group.heading_smoothing = HEADING_SMOOTHING
-                segment_group.threshold = THRESHOLD
+                if 'fruitfly' in expt:
+                    segment_group.threshold = THRESHOLD_FRUITFLY
+                elif 'mosquito' in expt:
+                    segment_group.threshold = THRESHOLD_MOSQUITO
                 segment_group.simulation = sim
 
                 session.add(segment_group)
@@ -94,7 +97,7 @@ def main():
                     idxs = np.array([tp.id for tp in tps])
 
                     # get segment start and end times, etc.
-                    segments = get_segments(odor, th=10, idxs=idxs, x_idx=x_idx, heading=heading)
+                    segments = get_segments(odor, th=segment_group.threshold, idxs=idxs, x_idx=x_idx, heading=heading)
 
                     for segment in segments:
                         segment.trial = trial
