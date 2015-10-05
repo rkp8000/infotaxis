@@ -5,7 +5,8 @@ from logprob_odor import binary_advec_diff_tavg
 
 EXPERIMENTS = ('fruitfly_0.3mps_checkerboard_floor',
                'fruitfly_0.4mps_checkerboard_floor',
-               'fruitfly_0.6mps_checkerboard_floor')
+               'fruitfly_0.6mps_checkerboard_floor',
+               'mosquito_0.4mps_checkerboard_floor')
 ODOR_STATES = ('on', 'none', 'afterodor')
 
 SIMULATION_ID = 'wind_tunnel_discretized_matched_r{}_d{}_{}_odor_{}'

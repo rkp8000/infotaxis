@@ -9,7 +9,8 @@ WT_REPO = os.path.join(os.getenv('REPOSITORY_DIRECTORY'), 'wind_tunnel')
 # THINGS TO LOOP OVER
 EXPERIMENT_IDS = ('fruitfly_0.3mps_checkerboard_floor',
                   'fruitfly_0.4mps_checkerboard_floor',
-                  'fruitfly_0.6mps_checkerboard_floor',)
+                  'fruitfly_0.6mps_checkerboard_floor',
+                  'mosquito_0.4mps_checkerboard_floor')
 ODOR_STATES = ('on', 'none', 'afterodor')
 
 # GEOM CONFIG GROUP
