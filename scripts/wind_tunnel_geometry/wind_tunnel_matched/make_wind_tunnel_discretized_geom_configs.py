@@ -23,7 +23,7 @@ def main(traj_limit=None):
     wt_models = imp.load_source('db_api.models', os.path.join(WT_REPO, 'db_api', 'models.py'))
 
     for experiment_id in EXPERIMENT_IDS:
-
+        print experiment_id
         for odor_state in ODOR_STATES:
 
             # make geom_config_group
@@ -34,9 +34,11 @@ def main(traj_limit=None):
 
             # get all wind tunnel trajectories of interest
             trajs = wt_session.query(wt_models.Trajectory).\
-                filter(wt_models.Trajectory.experiment_id == experiment_id).\
-                filter(wt_models.Trajectory.odor_state == odor_state).\
-                filter(wt_models.Trajectory.clean is True)
+                filter_by(
+                    experiment_id=experiment_id,
+                    odor_state=odor_state,
+                    clean=True
+                )
 
             for tctr, traj in enumerate(trajs):
 

@@ -4,11 +4,11 @@ Generate one infotaxis trial for every real trial, matching starting location, n
 from __future__ import print_function, division
 
 SCRIPTID = 'generate_wind_tunnel_discretized_matched_trials_one_for_one'
-SCRIPTNOTES = 'Run for all experiments and odor states with d now = 0.06 m^2/s.'
+SCRIPTNOTES = 'Run for all experiments and odor states with d = 0.06 m^2/s.'
 
 
 from insect import Insect
-from plume import CollimatedPlume
+from plume import CollimatedPlume, SpreadingGaussianPlume
 from trial import Trial
 
 from db_api import models
@@ -48,8 +48,10 @@ def main(traj_limit=None):
                 filter(models.Simulation.id.like(WIND_TUNNEL_DISCRETIZED_SIMULATION_ID_PATTERN))
 
             # get plume from corresponding discretized real wind tunnel trajectory
-            pl = CollimatedPlume(env=ENV, dt=-1, orm=wt_copy_sims.first().plume)
-
+            if 'fruitfly' in expt:
+                pl = CollimatedPlume(env=ENV, dt=-1, orm=wt_copy_sims.first().plume)
+            elif 'mosquito' in expt:
+                pl = SpreadingGaussianPlume(env=ENV, dt=-1, orm=wt_copy_sims.first().plume)
 
             # create insect
             # note: we will actually make a new insect for each trial, since the dt's vary;
@@ -57,7 +59,6 @@ def main(traj_limit=None):
             ins = Insect(env=ENV, dt=-1)
             ins.set_params(**insect_params)
             ins.generate_orm(models)
-
 
             # create simulation
             sim_id = SIMULATION_ID.format(insect_params['r'],
@@ -76,7 +77,6 @@ def main(traj_limit=None):
             sim.insect = ins.orm
 
             session.add(sim)
-
 
             # create ongoing run
             ongoing_run = models.OngoingRun(trials_completed=0, simulations=[sim])

@@ -86,7 +86,7 @@ def main(traj_limit=None):
                 traj = wt_session.query(wt_models.Trajectory).get(traj_id)
 
                 # get positions from traj
-                positions = traj.get_positions(wt_session)
+                positions = traj.positions(wt_session)
 
                 # create discretized version of trajectory
                 trial = TrialFromPositionSequence(positions, pl, ins)
