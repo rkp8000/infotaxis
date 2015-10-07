@@ -4,7 +4,7 @@ Generate one infotaxis trial for every real trial, matching starting location, n
 from __future__ import print_function, division
 
 SCRIPTID = 'generate_wind_tunnel_discretized_matched_trials_one_for_one'
-SCRIPTNOTES = 'Run for all experiments and odor states with d = 0.06 m^2/s.'
+SCRIPTNOTES = 'Run for all experiments and odor states with d = 0.04 m^2/s.'
 
 
 from insect import Insect
@@ -43,6 +43,13 @@ def main(traj_limit=None):
             geom_config_group = session.query(models.GeomConfigGroup).get(geom_config_group_id)
 
             # get wind tunnel copy simulation so we can match plume and insect
+            # note we select the first simulation that is of this type and corresponds to the
+            # right geom_config_group, since we only use the plume from it, which is independent
+            # of what insect parameters were used
+            #
+            # for instance, the plume bound to a simulation in which the insect had D = 0.6 and that
+            # bound to a simulation where D = 0.4 will be the same, since it is only the insect's
+            # internal model that has changed
             wt_copy_sims = session.query(models.Simulation).\
                 filter(models.Simulation.geom_config_group == geom_config_group).\
                 filter(models.Simulation.id.like(WIND_TUNNEL_DISCRETIZED_SIMULATION_ID_PATTERN))
