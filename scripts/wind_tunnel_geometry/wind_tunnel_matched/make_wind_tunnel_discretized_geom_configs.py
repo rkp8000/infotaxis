@@ -1,3 +1,12 @@
+"""
+Go through each wind tunnel trajectory and create its geometric configuration,
+which contains its starting position mapped to a discretized lattice, as well as its
+duration mapped to discretized time steps.
+
+Since discretized time steps are determined not by a strict DT, but rather by how many
+lattice points the trajectory traverses, the average DT is different for all trajectories.
+"""
+
 from __future__ import division
 
 SCRIPT_ID = 'make_wind_tunnel_discretized_geom_configs'
@@ -57,6 +66,7 @@ def main(traj_limit=None):
                 geom_config.extension_real_trajectory = ext
 
                 if traj_limit and (tctr == traj_limit - 1):
+
                     break
 
             session.add(geom_config_group)

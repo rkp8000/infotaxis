@@ -1,3 +1,8 @@
+"""
+THIS CODE IS NO LONGER IN USE, SINCE IT HAS BEEN ABSORBED BY "make_wind_tunnel_discretized...".
+IT WAS USED ONCE BEFORE THAT CODE HAD BEEN UPDATED.
+"""
+
 from __future__ import division
 
 SCRIPTID = 'extend_wind_tunnel_matched_geom_configs_with_trajectory_ids'
