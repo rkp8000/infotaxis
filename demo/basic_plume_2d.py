@@ -9,48 +9,76 @@ import matplotlib.pyplot as plt
 plt.ion()
 
 from insect import Insect
-from plume import BasicPlume
+from logprob_odor import binary_advec_diff_tavg
+from plume import BasicPlume, Environment3d
 from trial import Trial
 from plotting import plume_and_traj_3d as plot_trial
 
-from config.basic_plume_2d import *
+
+# PLOTTING
+PLOTEVERY = 10
+PAUSEEVERY = 50
+PLOTKWARGS = {'figsize': (10, 10),
+              'facecolor': 'w'}
 
 
-# create plume
-pl = BasicPlume(env=ENV, dt=DT)
-pl.set_params(**PLUME_PARAMS)
-pl.set_src_pos(SRCPOS, is_idx=True)
+# SIMULATION
+RUNTIME = 100  # (s)
 
-# create insect
-ins = Insect(env=ENV, dt=DT)
-ins.set_params(**PLUME_PARAMS)
-ins.loglike_function = LOGLIKE
-ins.set_pos(STARTPOS, is_idx=True)
 
-# create trial
-pl.initialize()
-ins.initialize()
-nsteps = int(np.floor(RUNTIME/DT))
+# ENVIRONMENT
+DT = .06  # (s)
+XRBINS = np.linspace(-.3, 1.0, 66)  # (m)
+YRBINS = np.linspace(-.15, .15, 16)  # (m)
+ZRBINS = np.linspace(-.15, .15, 2)  # (m)
+ENV = Environment3d(XRBINS, YRBINS, ZRBINS)
 
-trial = Trial(pl=pl, ins=ins, nsteps=nsteps)
 
-# open figure and axes
-_, axs = plt.subplots(3, 1, **PLOTKWARGS)
-plt.draw()
+# PLUME
+SRCPOS = (0, 7, 0)
+PLUME_PARAMS = {
+                'w': 0.4,  # wind (m/s)
+                'r': 10,  # source emission rate
+                'd': 0.12,  # diffusivity (m^2/s)
+                'a': .002,  # searcher size (m)
+                'tau': 1000,  # particle lifetime (s)
+                }
 
-# run trial, plotting along the way if necessary
-for step in xrange(nsteps - 1):
-    trial.step()
-    if (step % PLOTEVERY == 0) or (step == nsteps - 2):
-        plot_trial(axs, trial)
-        plt.draw()
 
-    if trial.at_src:
-        print 'Found source!'
-        break
+# INSECT
+STARTPOS = (64, 7, 0)
+LOGLIKE = binary_advec_diff_tavg
 
-    if PAUSEEVERY:
-        if step % PAUSEEVERY == 0:
-            raw_input('Press enter to continue...')
 
-raw_input()
+def run():
+    import pdb; pdb.set_trace()
+    # create plume
+    pl = BasicPlume(env=ENV, dt=DT)
+    pl.set_params(**PLUME_PARAMS)
+    pl.set_src_pos(SRCPOS, is_idx=True)
+
+    # create insect
+    ins = Insect(env=ENV, dt=DT)
+    ins.set_params(**PLUME_PARAMS)
+    ins.loglike_function = LOGLIKE
+    ins.set_pos(STARTPOS, is_idx=True)
+
+    # create trial
+    pl.initialize()
+    ins.initialize()
+    nsteps = int(np.floor(RUNTIME/DT))
+
+    trial = Trial(pl=pl, ins=ins, nsteps=nsteps)
+
+    # open figure and axes
+    _, axs = plt.subplots(3, 1, **PLOTKWARGS)
+
+    # run trial, plotting along the way if necessary
+    for step in xrange(nsteps - 1):
+        trial.step()
+
+        if trial.at_src:
+            print 'Found source!'
+            break
+
+    plot_trial(axs, trial)

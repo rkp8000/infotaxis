@@ -20,6 +20,7 @@ from config import *
 from config.exit_triggered_ensemble import *
 
 # parameters for this plot
+
 FACE_COLOR = 'white'
 FIG_SIZE = (16, 10)
 FONT_SIZE = 20
