@@ -1,1 +1,0 @@
-SIMULATIONID = 'test_simulation'
